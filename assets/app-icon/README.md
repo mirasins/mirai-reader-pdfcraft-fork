@@ -7,13 +7,14 @@
 **Style:** an engraving (woodcut-weight line work) portrait in the Crafting Apps "owl template" framing:
 a full-bleed colour field, no frame or roundel, the animal looking at the viewer and filling the tile.
 
-**Palette:** exactly three colours.
+**Palette:** the original three colours with a purple diamond for the Mirai fork.
 
 | Colour | Hex | Used for |
 |---|---|---|
 | Ink | `#0b0b0c` | line work and the figure's contour |
 | Paper | `#efe9dc` | the figure (the lion's silhouette) |
 | PdfCraft red (app colour) | `#b70228` | the full-bleed field |
+| Mirai purple | `#7541ae`, `#b88ce3` | the diamond and its highlight |
 
 **Tile:** `viewBox="0 0 512 512"`, a rounded square with `rx=112` that clips everything. Windows and Linux
 icons use the full-bleed tile. macOS icons put it on Apple's grid (an 824 px body centred on a transparent
@@ -21,6 +22,7 @@ icons use the full-bleed tile. macOS icons put it on Apple's grid (an 824 px bod
 
 **Provenance:** the project owner's original drawing, made in ArtCraft (2880 px, keyed to the palette), then
 vectorised (potrace; no filtering or warping).
+The Mirai fork adds a purple diamond to the original artwork.
 Licence: [LICENSE.txt](LICENSE.txt) (`MIT OR Apache-2.0`, like the repo).
 
 ## Files
