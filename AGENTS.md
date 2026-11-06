@@ -200,3 +200,20 @@ PdfCraft opens files from strangers, and people trust it with their work. A malf
 - Workflows in `.github/workflows/` call the shared workflows in [`storytold/craft-common-actions`](https://github.com/storytold/craft-common-actions) at `@main`, with their inputs and secrets. No other jobs: if no shared workflow does what's needed, it doesn't go here.
 - Don't add or change CI in a feature or fix PR. If the existing workflows can't build or test a change, link an existing craft-common-actions issue or PR, or open a new issue, or a PR only for a small fix that is safe for every app and does not increase CI time.
 - Some workflow files here still run their own jobs. Don't add to them. Moving a job into craft-common-actions is its own task, never part of another PR, and the job stays here until a shared workflow runs it.
+
+## Mirai fork
+- This repository is the Mirai fork of `storytold/pdfcraft`. Releases come from the fork only: see [`docs/release-channel.md`](docs/release-channel.md) (versions `X.Y.Z-mirai.N`, set with `cargo xtask version set`; `crates/ui-egui/tests/it/fork_release.rs` pins the update source).
+- When merging upstream, keep the fork's release channel, version and these sections; a doc's status line takes upstream's line plus at most one `> **Mirai fork:**` line, never a new stacked banner per sync.
+
+## OpenCode: delegación a subagentes
+- Prioriza Mistral Large para los subagentes, si la tarea lo requiere usa cualquier modelo a través de cualquiera de los proveedores disponibles. Consulta los modelos disponibles antes de seleccionarlos; no fijes identificadores ni versiones en el código o la documentación.
+- Delega tareas acotadas de búsqueda, revisión, implementación y pruebas según las capacidades disponibles, sin exigir verificación cruzada entre proveedores. El usuario decidirá cuándo verificar el trabajo o solicitar un agente verificador.
+- Puedes usar modelos de cualquiera de los proveedores disponibles según la tarea; no hay restricción de proveedor para los subagentes.
+- Mantén Mistral Large como primera opción; usa otro modelo cuando la tarea lo requiera o Mistral Large no esté disponible o agote su cuota. Informa de la alternativa elegida.
+- El agente principal coordina, toma las decisiones complejas y hace la revisión final del trabajo delegado.
+- Si un modelo solicitado no está disponible, informa al usuario y usa otro cuando sea adecuado.
+
+## Asistente Mirai: autenticación
+- El asistente Mirai usa exclusivamente el binario oficial de Claude Code con la sesión o el mecanismo OAuth oficialmente soportado del usuario; PdfCraft no extrae ni copia sus tokens.
+- No implementes fallback a API key, otros proveedores ni servidores propios. Si Claude Code no está disponible o su autenticación no es válida, muestra el error y ofrece instrucciones para instalarlo o iniciar sesión mediante su flujo oficial.
+- No cambies silenciosamente a credenciales API presentes en el entorno: verifica el método efectivo antes de enviar texto y rechaza los métodos no permitidos.

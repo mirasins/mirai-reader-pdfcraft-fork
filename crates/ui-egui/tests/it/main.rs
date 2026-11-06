@@ -45,6 +45,7 @@ mod export;
 mod fill_sign;
 mod folders;
 mod fonts;
+mod fork_release;
 mod forms;
 mod identity;
 mod javascript;

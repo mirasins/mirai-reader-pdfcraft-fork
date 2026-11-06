@@ -9,8 +9,8 @@ use craft_update::{CheckResultDialog, CheckResultResponse};
 
 use crate::PdfCraftApp;
 
-/// Where every PdfCraft release is listed.
-pub const RELEASES_PAGE: &str = "https://github.com/storytold/pdfcraft/releases";
+/// Where every release of the Mirai fork of PdfCraft is listed.
+pub const RELEASES_PAGE: &str = "https://github.com/mirasins/pdfcraft-Mirai-Fork/releases";
 
 /// Stands in for the network in tests.
 #[cfg(not(target_arch = "wasm32"))]
