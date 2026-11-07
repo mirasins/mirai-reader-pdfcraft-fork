@@ -30,8 +30,8 @@ fn discord_button_in_the_top_bar_opens_discord() {
 fn home_screen_links() {
     for (label, url) in [
         ("Join our Discord", links::DISCORD),
-        ("PdfCraft web page", "https://getartcraft.com/apps/pdfcraft"),
-        ("PdfCraft on GitHub", "https://github.com/mirasins/pdfcraft-Mirai-Fork"),
+        ("Mirai Reader web page", "https://getartcraft.com/apps/pdfcraft"),
+        ("Mirai Reader on GitHub", "https://github.com/mirasins/pdfcraft-Mirai-Fork"),
         ("ArtCraft website", "https://getartcraft.com"),
     ] {
         let mut h = harness(|_| {});

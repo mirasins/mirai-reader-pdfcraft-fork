@@ -540,7 +540,7 @@ pub fn key_name(s: &str) -> &str {
 
 /// Translate an English UI string; unknown strings come back unchanged.
 pub fn tr(lang: Lang, s: &str) -> &str {
-    lang.i18n().t(lang.lang, s)
+    crate::brand::rebrand(lang.i18n().t(lang.lang, s))
 }
 
 /// How the layers below say their own sentences in the current language.

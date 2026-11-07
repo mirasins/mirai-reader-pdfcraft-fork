@@ -37,6 +37,7 @@ macro_rules! tl_ctx {
         $crate::i18n::tr_ctx($crate::i18n::current(), $context, $s)
     };
 }
+pub mod brand;
 pub mod canvas;
 mod chrome;
 mod image_engine;

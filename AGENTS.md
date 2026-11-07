@@ -203,6 +203,7 @@ PdfCraft opens files from strangers, and people trust it with their work. A malf
 
 ## Mirai fork
 - This repository is the Mirai fork of `storytold/pdfcraft`. Releases come from the fork only: see [`docs/release-channel.md`](docs/release-channel.md) (versions `X.Y.Z-mirai.N`, set with `cargo xtask version set`; `crates/ui-egui/tests/it/fork_release.rs` pins the update source).
+- The app's name in this fork is **Mirai Reader**: `crates/ui-egui/src/brand.rs` holds it and rebrands every translated string (`i18n::tr`). Identifiers keep upstream's PdfCraft names (binary, crates, app id, file format, settings folder, installer registry keys and UpgradeCode); when merging upstream, keep the fork's name in titles, About, README and the installer's display names.
 - When merging upstream, keep the fork's release channel, version and these sections; a doc's status line takes upstream's line plus at most one `> **Mirai fork:**` line, never a new stacked banner per sync.
 
 ## OpenCode: delegación a subagentes

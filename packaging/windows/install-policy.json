@@ -58,7 +58,7 @@
       "-1",
       "Software\\Classes\\Applications\\pdfcraft.exe",
       "FriendlyAppName",
-      "PdfCraft"
+      "Mirai Reader"
     ],
     [
       "-1",
@@ -82,7 +82,7 @@
       "-1",
       "Software\\PdfCraft\\Capabilities",
       "ApplicationName",
-      "PdfCraft"
+      "Mirai Reader"
     ],
     [
       "-1",
@@ -124,7 +124,7 @@
       "-1",
       "Software\\Classes\\SystemFileAssociations\\.pdf\\shell\\PdfCraft.Edit",
       "",
-      "Edit with PdfCraft"
+      "Edit with Mirai Reader"
     ],
     [
       "-1",
@@ -148,7 +148,7 @@
       "-1",
       "Software\\Classes\\SystemFileAssociations\\.png\\shell\\PdfCraft.CreatePdf",
       "",
-      "Create PDF with PdfCraft\u2026"
+      "Create PDF with Mirai Reader\u2026"
     ],
     [
       "-1",
@@ -166,7 +166,7 @@
       "-1",
       "Software\\Classes\\SystemFileAssociations\\.jpg\\shell\\PdfCraft.CreatePdf",
       "",
-      "Create PDF with PdfCraft\u2026"
+      "Create PDF with Mirai Reader\u2026"
     ],
     [
       "-1",
@@ -184,7 +184,7 @@
       "-1",
       "Software\\Classes\\SystemFileAssociations\\.jpeg\\shell\\PdfCraft.CreatePdf",
       "",
-      "Create PDF with PdfCraft\u2026"
+      "Create PDF with Mirai Reader\u2026"
     ],
     [
       "-1",
@@ -202,7 +202,7 @@
       "-1",
       "Software\\Classes\\SystemFileAssociations\\.tif\\shell\\PdfCraft.CreatePdf",
       "",
-      "Create PDF with PdfCraft\u2026"
+      "Create PDF with Mirai Reader\u2026"
     ],
     [
       "-1",
@@ -220,7 +220,7 @@
       "-1",
       "Software\\Classes\\SystemFileAssociations\\.tiff\\shell\\PdfCraft.CreatePdf",
       "",
-      "Create PDF with PdfCraft\u2026"
+      "Create PDF with Mirai Reader\u2026"
     ],
     [
       "-1",
@@ -238,7 +238,7 @@
       "-1",
       "Software\\Classes\\SystemFileAssociations\\.gif\\shell\\PdfCraft.CreatePdf",
       "",
-      "Create PDF with PdfCraft\u2026"
+      "Create PDF with Mirai Reader\u2026"
     ],
     [
       "-1",
@@ -256,7 +256,7 @@
       "-1",
       "Software\\Classes\\SystemFileAssociations\\.bmp\\shell\\PdfCraft.CreatePdf",
       "",
-      "Create PDF with PdfCraft\u2026"
+      "Create PDF with Mirai Reader\u2026"
     ],
     [
       "-1",
@@ -274,7 +274,7 @@
       "-1",
       "Software\\Classes\\SystemFileAssociations\\.jp2\\shell\\PdfCraft.CreatePdf",
       "",
-      "Create PDF with PdfCraft\u2026"
+      "Create PDF with Mirai Reader\u2026"
     ],
     [
       "-1",
@@ -292,7 +292,7 @@
       "-1",
       "Software\\Classes\\SystemFileAssociations\\.j2k\\shell\\PdfCraft.CreatePdf",
       "",
-      "Create PDF with PdfCraft\u2026"
+      "Create PDF with Mirai Reader\u2026"
     ],
     [
       "-1",
@@ -310,7 +310,7 @@
       "-1",
       "Software\\Classes\\SystemFileAssociations\\.jpx\\shell\\PdfCraft.CreatePdf",
       "",
-      "Create PDF with PdfCraft\u2026"
+      "Create PDF with Mirai Reader\u2026"
     ],
     [
       "-1",

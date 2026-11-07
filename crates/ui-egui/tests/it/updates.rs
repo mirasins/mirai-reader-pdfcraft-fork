@@ -171,7 +171,7 @@ fn preferences_turn_the_check_at_start_off() {
     let (mut h, _calls) = started_with(r#"{"update_check_at_start": true}"#);
     h.state_mut().execute("app.preferences");
     h.run_steps(3);
-    h.get_by_label("Check for updates when PdfCraft starts").click();
+    h.get_by_label("Check for updates when Mirai Reader starts").click();
     h.run_steps(3);
     assert!(!h.state().update_check_at_start);
     // The control channel's option, as an agent sets it.
