@@ -1,36 +1,33 @@
-# PdfCraft app icon
+# Mirai Reader app icon
 
-<img src="pdfcraft-small.svg" alt="PdfCraft app icon: an engraved lion's head on red" width="128">
+<img src="pdfcraft-small.svg" alt="Mirai Reader app icon: a purple page with an eye on a deep night-purple tile" width="128">
 
-**Creature:** a lion, in a frontal head-and-shoulders portrait, mane running off the bottom of the tile.
+**Subject ("oceano morado"):** an upright page with a folded corner, an eye and two text lines.
 
-**Style:** an engraving (woodcut-weight line work) portrait in the Crafting Apps "owl template" framing:
-a full-bleed colour field, no frame or roundel, the animal looking at the viewer and filling the tile.
-
-**Palette:** the original three colours with a purple diamond for the Mirai fork.
+**Style:** flat shapes, no outline; the page has a diagonal purple gradient. No fonts or images.
 
 | Colour | Hex | Used for |
 |---|---|---|
-| Ink | `#0b0b0c` | line work and the figure's contour |
-| Paper | `#efe9dc` | the figure (the lion's silhouette) |
-| PdfCraft red (app colour) | `#b70228` | the full-bleed field |
-| Mirai purple | `#7541ae`, `#b88ce3` | the diamond and its highlight |
+| Night purple | `#24183e` | the full-bleed field |
+| Lilac to Mirai purple | `#d2a3ff` → `#7042c7` | the page gradient |
+| Pale lilac | `#eddaff`, `#f2e7ff` | the folded corner, text lines |
+| White | `#ffffff` | the eye |
 
-**Tile:** `viewBox="0 0 512 512"`, a rounded square with `rx=112` that clips everything. Windows and Linux
-icons use the full-bleed tile. macOS icons put it on Apple's grid (an 824 px body centred on a transparent
-1024 px canvas).
+**Tile:** `viewBox="0 0 512 512"`, a rounded square with `rx=118`. Windows and Linux icons use the
+full-bleed tile. macOS icons put it on Apple's grid (an 824 px body centred on a transparent 1024 px
+canvas).
 
-**Provenance:** the project owner's original drawing, made in ArtCraft (2880 px, keyed to the palette), then
-vectorised (potrace; no filtering or warping).
-The Mirai fork adds a purple diamond to the original artwork.
+**Provenance:** original work for the Mirai fork, drawn directly as SVG. It replaces upstream's engraved
+lion, which the Mirai fork does not ship. The PNG, `.ico` and `.icns` files were rendered from a 1024 px
+raster of the master, since the gradient needs a full SVG renderer (resvg handles it).
 Licence: [LICENSE.txt](LICENSE.txt) (`MIT OR Apache-2.0`, like the repo).
 
 ## Files
 
 | File | What it is |
 |---|---|
-| `pdfcraft.svg` | the master vector (traced at 2048 px); every PNG, `.ico` and `.icns` is rendered from it |
-| `pdfcraft-small.svg` | a lighter vector (traced at 1024 px) for places where size matters, such as this README |
+| `pdfcraft.svg` | the master vector; every PNG, `.ico` and `.icns` is rendered from it |
+| `pdfcraft-small.svg` | a copy of the master, kept as its own file for the README and the in-app mark |
 | `pdfcraft-1024.png` | 1024 px on Apple's grid; also the runtime Dock icon on macOS |
 | `pdfcraft.icns` | macOS icon (16–1024 px) |
 | `pdfcraft.ico` | Windows icon (16–256 px), embedded in `pdfcraft.exe` by `apps/pdfcraft/build.rs` |
