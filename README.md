@@ -385,8 +385,8 @@ PdfCraft is a clean-room implementation. Its behaviour comes from the ISO 32000 
 Building needs Rust 1.95 or later.
 
 ```sh
-git clone https://github.com/mirasins/pdfcraft-Mirai-Fork.git
-cd pdfcraft-Mirai-Fork
+git clone https://github.com/mirasins/mirai-reader-pdfcraft-fork.git
+cd mirai-reader-pdfcraft-fork
 cargo xtask models                                # fetch the OCR models Scan & OCR needs (release builds include them)
 cargo run --release -p pdfcraft -- some.pdf     # desktop app
 cargo xtask demo-pdf                              # build the showcase PDF used in these screenshots
@@ -442,7 +442,7 @@ The summary is in **[ROADMAP.md](ROADMAP.md)**; the full assessment by dimension
 
 ## Downloads
 
-Download Mirai Reader from the fork's [releases](https://github.com/mirasins/pdfcraft-Mirai-Fork/releases); check each release for its available files. The fork's Windows packaging process produces an MSI and a portable zip. Upstream's [releases](https://github.com/storytold/pdfcraft/releases) contain PdfCraft, not Mirai Reader.
+Download Mirai Reader from the fork's [releases](https://github.com/mirasins/mirai-reader-pdfcraft-fork/releases); check each release for its available files. The fork's Windows packaging process produces an MSI and a portable zip. Upstream's [releases](https://github.com/storytold/pdfcraft/releases) contain PdfCraft, not Mirai Reader.
 
 Fork Windows packages are unsigned and may trigger SmartScreen. The MSI shares its install identity with upstream PdfCraft, so installing either may replace the other. See the [fork release channel](docs/release-channel.md) for details.
 

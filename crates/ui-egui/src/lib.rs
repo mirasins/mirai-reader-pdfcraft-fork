@@ -15,7 +15,7 @@
 pub const UPDATE_APP: craft_update::app::App = craft_update::app::App {
     // The Mirai fork's releases: updates are only ever downloaded from the fork's own
     // repository, never from upstream.
-    repo: "mirasins/pdfcraft-Mirai-Fork",
+    repo: "mirasins/mirai-reader-pdfcraft-fork",
     icon_png: Some(include_bytes!("../../../assets/app-icon/hicolor/128x128/apps/ai.storyteller.pdfcraft.png")),
     accent: Some([0xb7, 0x02, 0x28]),
     ..craft_update::suite::PDFCRAFT

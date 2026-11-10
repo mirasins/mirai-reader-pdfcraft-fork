@@ -18,7 +18,7 @@ The Mirai fork ships its own releases, separate from upstream `storytold/pdfcraf
 ## Update checks and links
 
 `crates/ui-egui/src/lib.rs` defines `UPDATE_APP` with the repository
-`mirasins/pdfcraft-Mirai-Fork`. The in-app updater and the Windows self-update helper both use
+`mirasins/mirai-reader-pdfcraft-fork`. The in-app updater and the Windows self-update helper both use
 it, so update checks and downloads only ever look at the fork's GitHub releases — never at
 upstream's. The releases page (`crates/ui-egui/src/platform/updates.rs`) and the source link
 (`crates/engine/src/links.rs`) name the fork too. `crates/ui-egui/tests/it/fork_release.rs` pins
