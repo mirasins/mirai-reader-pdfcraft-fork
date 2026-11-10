@@ -262,16 +262,11 @@ Documents restricted by their author show a clear notice, and PdfCraft honours t
 
 Press <kbd>⌘K</kbd> to search every tool and command, or browse the **All tools** catalogue. Tools that are still in development are marked with the milestone that will ship them.
 
-<table>
-<tr>
-<td width="50%"><img src="docs/images/pdfcraft-palette.png" alt="The command palette searching for 'page', listing Page grid, Page labels, Rotate pages, Insert pages, Delete pages, Extract pages and more, each with the tool it belongs to"></td>
-<td width="50%"><img src="docs/images/pdfcraft-tools.png" alt="The Welcome to PdfCraft home screen with recommended tools, a recent file, a privacy note, and the full tool catalogue in the side panel"></td>
-</tr>
-<tr>
-<td align="center"><sub>The <kbd>⌘K</kbd> command palette</sub></td>
-<td align="center"><sub>The home screen and the All tools catalogue</sub></td>
-</tr>
-</table>
+<p align="center">
+  <img src="docs/images/pdfcraft-palette.png" alt="The command palette searching for 'page', listing Page grid, Page labels, Rotate pages, Insert pages, Delete pages, Extract pages and more, each with the tool it belongs to" width="100%">
+  <br>
+  <sub>The <kbd>⌘K</kbd> command palette</sub>
+</p>
 
 ---
 
