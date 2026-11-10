@@ -42,8 +42,8 @@
     <SetProperty Id="EXISTINGDESKTOPSHORTCUT" Action="CraftExistingMachineShortcut" Value="[EXISTINGDESKTOPSHORTCUT_MACHINE]" After="CraftLoadOption2U" Sequence="first" Condition="ALLUSERS = 1 AND EXISTINGDESKTOPSHORTCUT_MACHINE" />
     <SetProperty Id="EXISTINGDESKTOPSHORTCUT" Action="CraftExistingUserShortcut" Value="[EXISTINGDESKTOPSHORTCUT_USER]" After="CraftExistingMachineShortcut" Sequence="first" Condition="ALLUSERS &lt;&gt; 1 AND EXISTINGDESKTOPSHORTCUT_USER" />
     <SetProperty Id="INSTALLDESKTOPSHORTCUT" Value="1" After="CraftExistingUserShortcut" Sequence="first" Condition="NOT INSTALLDESKTOPSHORTCUT AND (NOT WIX_UPGRADE_DETECTED OR EXISTINGDESKTOPSHORTCUT)" />
-    <!-- The File Explorer menus: "Edit with PdfCraft" for PDF files (#682) and "Create PDF with
-         PdfCraft…" for images (#190). Each is on by default for a first install and has a property
+    <!-- The File Explorer menus: "Edit with Mirai Reader" for PDF files (#682) and "Create PDF with
+         Mirai Reader…" for images (#190). Each is on by default for a first install and has a property
          to leave it out of unattended installs: INSTALLPDFCONTEXTMENU=0 (also a welcome-dialog
          checkbox) and INSTALLIMAGECONTEXTMENU=0. Secure, like the desktop shortcut's.
          An update keeps the installed version's choice (#305) by looking for the menu's registry
@@ -108,7 +108,7 @@
              run as a file handler ("This app can't run on your PC"). -->
         <RegistryValue Root="HKMU" Key="Software\Classes\PdfCraft.Document" Value="PDF Document" Type="string" />
         <!-- A negative index selects the stable icon resource ID, rather than its position.
-             Resource 1 is the app's lion; resource 2 is the PDF document (build.rs). -->
+             Resource 1 is the app's own icon; resource 2 is the PDF document (build.rs). -->
         <RegistryValue Root="HKMU" Key="Software\Classes\PdfCraft.Document\DefaultIcon" Value="&quot;[#PdfcraftExe]&quot;,-2" Type="string" />
         <RegistryValue Root="HKMU" Key="Software\Classes\PdfCraft.Document\shell\open\command" Value="&quot;[#PdfcraftExe]&quot; &quot;%1&quot;" Type="string" />
         <!-- No overlay on thumbnails and in the preview pane: without TypeOverlay, Windows paints
@@ -133,18 +133,21 @@
            ones point at a Windows Installer descriptor rather than the program, which Windows can't
            use as a file handler (#107), and 0.2.1's advertised one went missing from the Start menu
            (#143). Each has its own component with an HKLM key path, so Windows Installer removes it
-           on uninstall; in this per-machine package both folders are the all-users ones. -->
+           on uninstall; in this per-machine package both folders are the all-users ones. They take
+           their icon from pdfcraft.exe, not the Icon table: Windows Installer keeps that copy under
+           the ProductCode, which every release changes, so a taskbar pin made from a shortcut that
+           named it shows a blank icon once an update removes the old release. -->
       <Component Id="PdfcraftStartMenuShortcut" Directory="ProgramMenuFolder" Guid="DC028192-C233-4F99-9A77-ED458C60DF26">
-        <Shortcut Id="StartMenuShortcut" Name="Mirai Reader" Description="Mirai Reader PDF workbench" Target="[#PdfcraftExe]" WorkingDirectory="INSTALLFOLDER" Icon="PdfcraftIcon.ico" IconIndex="0" />
+        <Shortcut Id="StartMenuShortcut" Name="Mirai Reader" Description="Mirai Reader PDF workbench" Target="[#PdfcraftExe]" WorkingDirectory="INSTALLFOLDER" />
         <RegistryValue Root="HKMU" Key="Software\PdfCraft\Shortcuts" Name="StartMenu" Type="integer" Value="1" KeyPath="yes" />
       </Component>
 
       <Component Id="PdfcraftDesktopShortcut" Directory="DesktopFolder" Guid="F6948627-32AB-4D78-8865-0FDF417CE442" Condition="INSTALLDESKTOPSHORTCUT = 1">
-        <Shortcut Id="DesktopShortcut" Name="Mirai Reader" Description="Mirai Reader PDF workbench" Target="[#PdfcraftExe]" WorkingDirectory="INSTALLFOLDER" Icon="PdfcraftIcon.ico" IconIndex="0" />
+        <Shortcut Id="DesktopShortcut" Name="Mirai Reader" Description="Mirai Reader PDF workbench" Target="[#PdfcraftExe]" WorkingDirectory="INSTALLFOLDER" />
         <RegistryValue Root="HKMU" Key="Software\PdfCraft\Shortcuts" Name="Desktop" Type="integer" Value="1" KeyPath="yes" />
       </Component>
 
-      <!-- PDF context menu (#682): "Edit with PdfCraft" opens the file in PdfCraft whichever app is
+      <!-- PDF context menu (#682): "Edit with Mirai Reader" opens the file in Mirai Reader whichever app is
            the default for .pdf, which it leaves alone (SystemFileAssociations, like the image
            menu). Several PDFs selected (up to 15, Windows' limit for this kind of entry) start one
            launch each, and the single-instance hand-off opens them as tabs of one window. On
@@ -156,9 +159,16 @@
         <RegistryValue Root="HKMU" Key="Software\Classes\SystemFileAssociations\.pdf\shell\PdfCraft.Edit" Name="Icon" Value="&quot;[#PdfcraftExe]&quot;,0" Type="string" />
         <RegistryValue Root="HKMU" Key="Software\Classes\SystemFileAssociations\.pdf\shell\PdfCraft.Edit" Name="MultiSelectModel" Value="Document" Type="string" />
         <RegistryValue Root="HKMU" Key="Software\Classes\SystemFileAssociations\.pdf\shell\PdfCraft.Edit\command" Value="&quot;[#PdfcraftExe]&quot; &quot;%1&quot;" Type="string" />
+        <!-- "Combine files in Mirai Reader" (#585), on the same switch: each selected file starts one
+             launch of pdfcraft.exe with the combine option, and the running Mirai Reader collects them into its Combine
+             files tab (single_instance). -->
+        <RegistryValue Root="HKMU" Key="Software\Classes\SystemFileAssociations\.pdf\shell\PdfCraft.Combine" Value="Combine files in Mirai Reader" Type="string" />
+        <RegistryValue Root="HKMU" Key="Software\Classes\SystemFileAssociations\.pdf\shell\PdfCraft.Combine" Name="Icon" Value="&quot;[#PdfcraftExe]&quot;,0" Type="string" />
+        <RegistryValue Root="HKMU" Key="Software\Classes\SystemFileAssociations\.pdf\shell\PdfCraft.Combine" Name="MultiSelectModel" Value="Document" Type="string" />
+        <RegistryValue Root="HKMU" Key="Software\Classes\SystemFileAssociations\.pdf\shell\PdfCraft.Combine\command" Value="&quot;[#PdfcraftExe]&quot; --combine &quot;%1&quot;" Type="string" />
       </Component>
 
-      <!-- Image context menu (#190): "Create PDF with PdfCraft…" opens the DPI chooser, without
+      <!-- Image context menu (#190): "Create PDF with Mirai Reader…" opens the DPI chooser, without
            changing image file defaults. Its own component with an HKLM key path, so
            INSTALLIMAGECONTEXTMENU=0 leaves it out and uninstall removes it. These rows were in
            PdfcraftApp up to 0.7.1; moving them is safe because MajorUpgrade removes the old version

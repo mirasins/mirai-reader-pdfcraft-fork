@@ -16,7 +16,7 @@ sha256 = "cd7032ea33b71427f188e34ffb4aee9d6868a57fd196037c5c8b2be03a2a0352"
 [[document]]
 source = "NOTICE"
 destination = "NOTICE"
-sha256 = "4512915572b9462b16a1ff91498f2e0e269244e7ea2e912014dafde630ab58ce"
+sha256 = "dafcf74b271e502462bf67de18502281bdafc9cbd8622dcacbf3c15c2239a793"
 
 [[document]]
 source = "assets/app-icon/LICENSE-document.txt"
@@ -26,7 +26,7 @@ sha256 = "64a3137e3d5cc41e5b78d2ad8dd9ddddd6588283f9f7b3128aa6a8a50852fb9a"
 [[document]]
 source = "assets/app-icon/LICENSE.txt"
 destination = "assets/app-icon/LICENSE.txt"
-sha256 = "b768acafe6cbad8247eedf86b5b5381feefcd4ee0f8c7808b86811bc687cf37b"
+sha256 = "3d5c25373cd8e9097875e4b65bc15df2448db1a7592412193bf62067076c931e"
 
 [[document]]
 source = "assets/fonts/OFL-DancingScript.txt"
@@ -54,6 +54,13 @@ licences = ["BSD-3-Clause"]
 destination = "licenses/CMap-LICENSE.txt"
 sha256 = "742665db9c8e1bc72603c6d319ca3e90b83bd6d95202f0cd4ef11068a07a9c29"
 origin = "https://static.crates.io/crates/hayro-cmap/hayro-cmap-0.1.0.crate#assets/LICENSE.txt"
+
+[[document]]
+source = "licenses/ICU4X-LICENSE.txt"
+licences = ["Unicode-3.0"]
+destination = "licenses/ICU4X-LICENSE.txt"
+sha256 = "f367c1b8e1aa262435251e442901da4607b4650e0e63a026f5044473ecfb90f2"
+origin = "https://static.crates.io/crates/icu_segmenter_data/icu_segmenter_data-2.3.0.crate#LICENSE"
 
 [[document]]
 source = "licenses/egui-Hack-Regular.txt"
@@ -159,3 +166,9 @@ crate = "hayro-interpret"
 path = "src/font/generated/metrics.rs"
 licence = "MIT OR Apache-2.0"
 documents = ["vendor/hayro-interpret/LICENSE-MIT", "vendor/hayro-interpret/LICENSE-APACHE"]
+
+[[bundled]]
+crate = "icu_segmenter_data"
+path = "data/segmenter_dictionary_extended_v1.rs.data"
+licence = "Unicode-3.0"
+documents = ["licenses/ICU4X-LICENSE.txt"]

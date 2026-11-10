@@ -45,6 +45,10 @@ if ($LASTEXITCODE -ne 0) { throw 'Dual-scope installer contract failed.' }
 $Installer.UILevel = 2
 $manufacturer = Read-Row 'SELECT `Value` FROM `Property` WHERE `Property` = ''Manufacturer''' 1
 Assert-Equal $manufacturer[0] 'Learning Machines LLC' 'MSI manufacturer'
+# The fork's display name: it titles every dialog ([ProductName] Setup), the Add/Remove Programs
+# entry and the shortcuts, so it is the one string the whole installer inherits.
+$productName = Read-Row 'SELECT `Value` FROM `Property` WHERE `Property` = ''ProductName''' 1
+Assert-Equal $productName[0] 'Mirai Reader' 'MSI product name'
 
 # Embedded craft-fonts must ship their OFL notices; a build without them must not claim any.
 # Check the compiled File table, not only the WiX source, so a staging or component-group mistake
@@ -73,17 +77,23 @@ $status = Read-Row 'SELECT `Text` FROM `Control` WHERE `Dialog_` = ''InstallProg
 Assert-Equal $status[0] 'Please wait while setup completes.' 'Persistent progress message'
 Assert-NoRow 'SELECT `Event` FROM `EventMapping` WHERE `Dialog_` = ''InstallProgress'' AND `Control_` = ''Status''' 'progress text subscription'
 
-# Plain (non-advertised) shortcuts to pdfcraft.exe, each in its own component; the desktop one is
-# gated by INSTALLDESKTOPSHORTCUT, which is secure so the UI choice reaches the
+# Plain (non-advertised) shortcuts to pdfcraft.exe, each in its own component and with no Icon
+# table entry, so the shell takes the exe's own icon and a pin keeps it across updates. The
+# desktop one is gated by INSTALLDESKTOPSHORTCUT, which is secure so the UI choice reaches the
 # elevated install.
 foreach ($entry in @(@('StartMenuShortcut', 'ProgramMenuFolder', 'PdfcraftStartMenuShortcut', ''),
                      @('DesktopShortcut', 'DesktopFolder', 'PdfcraftDesktopShortcut', 'INSTALLDESKTOPSHORTCUT = 1'))) {
   $row = Read-Row ('SELECT `Directory_`, `Target`, `Icon_`, `WkDir`, `Component_` FROM `Shortcut` WHERE `Shortcut` = ''' + $entry[0] + '''') 5
   Assert-Equal $row[0] $entry[1] "$($entry[0]) directory"
   Assert-Equal $row[1] '[#PdfcraftExe]' "$($entry[0]) target"
-  Assert-Equal $row[2] 'PdfcraftIcon.ico' "$($entry[0]) icon"
+  Assert-Equal $row[2] '' "$($entry[0]) icon"
   Assert-Equal $row[3] 'INSTALLFOLDER' "$($entry[0]) working directory"
   Assert-Equal $row[4] $entry[2] "$($entry[0]) component"
+  # The fork's name on the shortcut itself: the .lnk the user sees (Name holds the generated 8.3
+  # name and the long name, separated by a pipe) and its description.
+  $label = Read-Row ('SELECT `Name`, `Description` FROM `Shortcut` WHERE `Shortcut` = ''' + $entry[0] + '''') 2
+  Assert-Equal (($label[0] -split '\|')[-1]) 'Mirai Reader' "$($entry[0]) name"
+  Assert-Equal $label[1] 'Mirai Reader PDF workbench' "$($entry[0]) description"
   $component = Read-Row ('SELECT `Directory_`, `Condition` FROM `Component` WHERE `Component` = ''' + $entry[2] + '''') 2
   Assert-Equal $component[0] $entry[1] "$($entry[2]) directory"
   Assert-Equal $component[1] $entry[3] "$($entry[2]) condition"
@@ -217,7 +227,7 @@ Assert-KeptOnUpdate 'INSTALLIMAGECONTEXTMENU' 'IMAGECONTEXTMENURELEASE' 'EXISTIN
 Assert-MenuSearch 'EXISTINGIMAGECONTEXTMENU' $imageKey 'IMAGECONTEXTMENURELEASE' '0.4.0' 'Image context menu'
 if (($secure[0] -split ';') -notcontains 'INSTALLIMAGECONTEXTMENU') { throw "INSTALLIMAGECONTEXTMENU is not secure: '$($secure[0])'" }
 
-# PDF context menu (#682): "Edit with PdfCraft" opens the file in PdfCraft. Its own component, gated
+# PDF context menu (#682): "Edit with Mirai Reader" opens the file in Mirai Reader. Its own component, gated
 # by INSTALLPDFCONTEXTMENU (on for a first install, kept on update only while present, secure, welcome
 # checkbox), with its menu value as key path so uninstall removes it. Several selected PDFs each start pdfcraft.exe "%1" (Document), which the
 # single-instance hand-off opens as tabs. The .pdf default is never set, so the user's default app
@@ -244,10 +254,51 @@ if (($secure[0] -split ';') -notcontains 'INSTALLPDFCONTEXTMENU') { throw "INSTA
 $pdfCheckbox = Read-Row 'SELECT `Type`, `Property`, `Text` FROM `Control` WHERE `Dialog_` = ''InstallWelcome'' AND `Control` = ''PdfContextMenu''' 3
 Assert-Equal $pdfCheckbox[0] 'CheckBox' 'Welcome PDF context-menu control'
 Assert-Equal $pdfCheckbox[1] 'INSTALLPDFCONTEXTMENU' 'Welcome PDF context-menu property'
-if ($pdfCheckbox[2] -notmatch 'Edit with Mirai Reader') { throw "Welcome PDF context-menu label: '$($pdfCheckbox[2])'" }
+if ($pdfCheckbox[2] -notmatch '&Edit' -or $pdfCheckbox[2] -notmatch 'Combine files' -or $pdfCheckbox[2] -notmatch 'Mirai Reader') { throw "Welcome PDF context-menu label: '$($pdfCheckbox[2])'" }
 $pdfChecked = Read-Row 'SELECT `Value` FROM `CheckBox` WHERE `Property` = ''INSTALLPDFCONTEXTMENU''' 1
 Assert-Equal $pdfChecked[0] '1' 'Welcome PDF context-menu value'
 Assert-NoRow 'SELECT `Registry` FROM `Registry` WHERE `Key` = ''Software\Classes\.pdf'' AND `Name` IS NULL' '.pdf default app'
+# "Combine files in Mirai Reader" (#585): in the PDF menu's component, so the one switch covers both
+# verbs. Each selected file starts `pdfcraft --combine "<file>"` (Document), and the running
+# Mirai Reader collects them into its Combine files tab.
+$combineKey = 'Software\Classes\SystemFileAssociations\.pdf\shell\PdfCraft.Combine'
+$combineMenu = Read-Row ('SELECT `Value`, `Component_`, `Root` FROM `Registry` WHERE `Key` = ''' + $combineKey + ''' AND `Name` IS NULL') 3
+Assert-Equal $combineMenu[0] 'Combine files in Mirai Reader' 'Combine verb label'
+Assert-Equal $combineMenu[1] 'PdfcraftPdfContextMenu' 'Combine verb component'
+Assert-Equal $combineMenu[2] '-1' 'Combine verb context-sensitive root'
+foreach ($value in @(@('Icon', '"[#PdfcraftExe]",0'), @('MultiSelectModel', 'Document'))) {
+  $row = Read-Row ('SELECT `Value`, `Component_` FROM `Registry` WHERE `Key` = ''' + $combineKey + ''' AND `Name` = ''' + $value[0] + '''') 2
+  Assert-Equal $row[0] $value[1] "Combine verb $($value[0])"
+  Assert-Equal $row[1] 'PdfcraftPdfContextMenu' "Combine verb $($value[0]) component"
+}
+$combineCommand = Read-Row ('SELECT `Value`, `Component_` FROM `Registry` WHERE `Key` = ''' + $combineKey + '\command''') 2
+Assert-Equal $combineCommand[0] '"[#PdfcraftExe]" --combine "%1"' 'Combine verb command'
+Assert-Equal $combineCommand[1] 'PdfcraftPdfContextMenu' 'Combine verb command component'
+
+# Install folder (#1139): the welcome dialog's "Install to" row (a PathEdit, and Browse… into a
+# native folder browser) changes the folder install-policy.wxi chose for the scope. Its secure
+# property, the recorded folder and the restore on update are check-install-policy.ps1's.
+$installTo = Read-Row 'SELECT `Type`, `Property` FROM `Control` WHERE `Dialog_` = ''InstallWelcome'' AND `Control` = ''InstallTo''' 2
+Assert-Equal $installTo[0] 'PathEdit' 'Welcome install-folder control'
+Assert-Equal $installTo[1] 'INSTALLFOLDER' 'Welcome install-folder property'
+$browse = Read-Row 'SELECT `Event`, `Argument` FROM `ControlEvent` WHERE `Dialog_` = ''InstallWelcome'' AND `Control_` = ''Browse''' 2
+Assert-Equal $browse[0] 'SpawnDialog' 'Welcome Browse event'
+Assert-Equal $browse[1] 'BrowseFolder' 'Welcome Browse dialog'
+# Each scope has its own Install button, and each sets the folder before the dialog closes.
+foreach ($button in @('Install', 'InstallUser')) {
+  $setPath = Read-Row ('SELECT `Ordering` FROM `ControlEvent` WHERE `Dialog_` = ''InstallWelcome'' AND `Control_` = ''' + $button + ''' AND `Event` = ''SetTargetPath'' AND `Argument` = ''INSTALLFOLDER''') 1
+  $endWelcome = Read-Row ('SELECT `Ordering` FROM `ControlEvent` WHERE `Dialog_` = ''InstallWelcome'' AND `Control_` = ''' + $button + ''' AND `Event` = ''EndDialog''') 1
+  if ([int] $setPath[0] -ge [int] $endWelcome[0]) { throw "$button must set the install folder before closing the welcome dialog" }
+}
+foreach ($control in @('DirectoryCombo', 'DirectoryList', 'PathEdit')) {
+  $row = Read-Row ('SELECT `Type`, `Property` FROM `Control` WHERE `Dialog_` = ''BrowseFolder'' AND `Control` = ''' + $control + '''') 2
+  Assert-Equal $row[0] $control "Browse $control control"
+  Assert-Equal $row[1] 'INSTALLFOLDER' "Browse $control property"
+}
+$browseOk = Read-Row 'SELECT `Argument` FROM `ControlEvent` WHERE `Dialog_` = ''BrowseFolder'' AND `Control_` = ''OK'' AND `Event` = ''SetTargetPath''' 1
+Assert-Equal $browseOk[0] 'INSTALLFOLDER' 'Browse OK sets the folder'
+$browseCancel = Read-Row 'SELECT `Event` FROM `ControlEvent` WHERE `Dialog_` = ''BrowseFolder'' AND `Control_` = ''Cancel'' AND `Event` = ''Reset''' 1
+Assert-Equal $browseCancel[0] 'Reset' 'Browse Cancel puts the folder back'
 
 # Negative sequences are Windows Installer's success/user-exit/failure paths. Only full UI
 # shows these dialogs: an unattended /qn or /qb install must never wait for a Finish click.
@@ -282,4 +333,4 @@ $rm = Read-Row 'SELECT `Dialog` FROM `Dialog` WHERE `Dialog` = ''MsiRMFilesInUse
 Assert-Equal $rm[0] 'MsiRMFilesInUse' 'Files-in-use dialog'
 [void] [Runtime.InteropServices.Marshal]::FinalReleaseComObject($Database)
 [void] [Runtime.InteropServices.Marshal]::FinalReleaseComObject($Installer)
-Write-Output 'ok MSI: dual-scope guards, publisher, persistent progress text, Start Menu shortcut, optional desktop shortcut and PDF and image context menus (on for a first install, kept on update only while present; checkboxes for the first two), icon/key path, full-UI success/cancel/error and Finish controls, files-in-use dialog, OCR models'
+Write-Output 'ok MSI: dual-scope guards, publisher, persistent progress text, Start Menu shortcut, optional desktop shortcut and PDF (Edit, Combine files) and image context menus (on for a first install, kept on update only while present; checkboxes for the first two), install folder (welcome row and browse dialog), icon/key path, full-UI success/cancel/error and Finish controls, files-in-use dialog, OCR models'
