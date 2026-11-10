@@ -642,6 +642,31 @@ fn page_text(a: &mut Automation, doc: u64) -> Vec<String> {
     ok(a, "text_extract", json!({ "doc": doc }))["pages"].as_array().unwrap().iter().map(|p| p["text"].as_str().unwrap().trim().to_string()).collect()
 }
 
+/// Works on a machine without Claude Code too: any known state passes, nothing is asked of Claude.
+#[test]
+fn assistant_status_reports_a_known_state() {
+    let mut a = Automation::new();
+    let v = ok(&mut a, "assistant_status", json!({}));
+    assert_eq!(v["name"], "Mirai Assistant");
+    let code = v["status"].as_str().unwrap_or_default();
+    assert!(["not_installed", "not_signed_in", "disallowed_method", "unavailable", "ready"].contains(&code), "unexpected status {code:?}");
+    assert_eq!(v["ready"], code == "ready");
+    assert!(v["advice"].as_str().is_some_and(|s| !s.is_empty()), "advice is empty: {v}");
+}
+
+/// Bad arguments are refused before any text is read or any process is started.
+#[test]
+fn assistant_ask_validates_its_arguments() {
+    let dir = workdir("assistant-ask-args");
+    let mut a = auto(&dir);
+    let doc = ok(&mut a, "doc_open", json!({"path": "a.pdf"}))["doc"].as_u64().unwrap();
+    let refused = |a: &mut Automation, args: Value| matches!(a.call("assistant_ask", &args), Err(ToolError::InvalidArgs(_)));
+    assert!(refused(&mut a, json!({"doc": doc, "task": "ask"})), "ask without a question");
+    assert!(refused(&mut a, json!({"doc": doc, "task": "ask", "question": "   "})), "ask with a blank question");
+    assert!(refused(&mut a, json!({"doc": doc, "task": "translate"})), "translate without a language");
+    assert!(refused(&mut a, json!({"doc": doc, "task": "bogus"})), "unknown task");
+}
+
 #[test]
 fn tool_table_is_well_formed() {
     let all = tools();

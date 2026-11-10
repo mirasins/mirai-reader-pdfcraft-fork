@@ -403,6 +403,7 @@ update the numbers.
 - **Missing:** the opt-in provider interface (local model or the user's own endpoint) and the
   features on it: summarize, ask with page citations, alternate-text and redaction suggestions.
   Acrobat's AI Assistant is a cloud service and out of scope.
+  > **Mirai fork:** Mirai Assistant (`crates/ai`) is intended to use only the official Claude Code binary with the user's Claude account sign-in; sending is disabled until the prompt process's effective authentication and managed hooks can be verified. There is no local model, API key or other endpoint fallback.
 - **Estimate:** 20–40 h. **Doc:** [target-app-parity.md](target-app-parity.md).
 
 ### 24. Checklist not diffed against Acrobat's own menus

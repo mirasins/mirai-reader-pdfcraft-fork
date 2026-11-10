@@ -515,6 +515,8 @@ pub struct PdfCraftApp {
     /// Scan & OCR: the Recognize Text choices, the running job, and (tests) run it inline.
     pub ocr_draft: ocr_ui::OcrDraft,
     pub ocr_run: Option<ocr_ui::OcrRun>,
+    /// Mirai Assistant: sign-in status, the request in flight and the last answer.
+    pub(crate) assistant: panels::assistant::AssistantState,
     pub ocr_batch: Option<std::sync::Arc<std::sync::Mutex<ocr_ui::BatchProgress>>>,
     /// Scan & OCR ▸ Correct recognized text: the OCR Verify screen (its state, never persisted).
     pub ocr_verify: ocr_verify::OcrVerify,

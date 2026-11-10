@@ -9748,15 +9748,15 @@ notes = ""
 
 [[feature]]
 id = "misc.ai-provider"
-title = "AI provider interface (local model or own endpoint), off by default"
+title = "Mirai Assistant through the user's Claude Code sign-in, off until asked"
 area = "N"
 tier = "P2"
 milestone = "M13"
-status = "planned"
+status = "partial"
 commands = []
-tools = []
-evidence = []
-notes = ""
+tools = ["assistant_status"]
+evidence = ["crates/ai/src/tests.rs::a_claude_account_sign_in_is_ready", "crates/ai/src/tests.rs::an_api_key_or_another_provider_is_refused", "crates/ai/src/tests.rs::every_status_says_what_to_do", "crates/automation/tests/it/automation.rs::assistant_status_reports_a_known_state"]
+notes = "Mirai fork: the status and request interfaces exist, but sending is disabled until the effective authentication and managed hooks of the Claude Code prompt process can be verified. Offline tests only; no real Claude Code request has been tested."
 
 [[feature]]
 id = "misc.ai-summary"
@@ -9766,9 +9766,9 @@ tier = "P2"
 milestone = "M13"
 status = "planned"
 commands = []
-tools = []
+tools = ["assistant_ask"]
 evidence = []
-notes = ""
+notes = "Mirai fork: the assistant_ask tool and the Mirai Assistant panel exist; only argument checks and the prompt are tested offline, never a real Claude Code reply, so this stays planned."
 
 [[feature]]
 id = "misc.ai-ask"
@@ -9778,9 +9778,9 @@ tier = "P2"
 milestone = "M13"
 status = "planned"
 commands = []
-tools = []
+tools = ["assistant_ask"]
 evidence = []
-notes = ""
+notes = "Mirai fork: the assistant_ask tool and the Mirai Assistant panel exist; only argument checks and the prompt are tested offline, never a real Claude Code reply, so this stays planned."
 
 [[feature]]
 id = "misc.ai-conversational-edit"

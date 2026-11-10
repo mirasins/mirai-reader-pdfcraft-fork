@@ -24,6 +24,8 @@ pdfcraft-engine = { workspace = true }
 pdfcraft-cos = { workspace = true }
 pdfcraft-content = { workspace = true }
 pdfcraft-ocr = { workspace = true }
+# Mirai Assistant: asks Claude Code (the user's own sign-in) about the open document.
+pdfcraft-ai = { workspace = true }
 pdfcraft-render = { workspace = true }
 pdfcraft-model = { workspace = true }
 pdfcraft-platform = { workspace = true }

@@ -52,6 +52,7 @@ use file_access::foreign_share;
 use text_cache::TextCache;
 
 mod assemble;
+mod assistant;
 mod bookmark_io;
 mod dispatch;
 mod documents;

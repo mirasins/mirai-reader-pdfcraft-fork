@@ -19,6 +19,11 @@ impl PdfCraftApp {
             self.execute(command);
             return;
         }
+        // Mirai Assistant's items open its panel; nothing is sent until a button there is pressed.
+        if matches!(command, "ai.summary" | "ai.ask" | "ai.translate") {
+            self.select_tool("ai");
+            return;
+        }
         // Not implemented yet: say which milestone ships it.
         let when = pdfcraft_engine::catalog::TOOL_GROUPS
             .iter()
@@ -26,7 +31,7 @@ impl PdfCraftApp {
             .find(|i| i.command == command)
             .map(|i| match i.availability {
                 pdfcraft_engine::catalog::Availability::Planned(m) => crate::i18n::fmt(tl!("ships in milestone {m}"), &[("m", m)]),
-                pdfcraft_engine::catalog::Availability::Provider => tl!("needs an AI provider (off by default)").to_string(),
+                pdfcraft_engine::catalog::Availability::Provider => tl!("needs Claude Code, signed in with your Claude account").to_string(),
                 pdfcraft_engine::catalog::Availability::Ready => tl!("is available").to_string(),
             })
             .unwrap_or_else(|| tl!("is not available yet").to_string());

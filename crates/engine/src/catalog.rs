@@ -530,13 +530,15 @@ pub static TOOL_GROUPS: &[ToolGroup] = &[
     },
     ToolGroup {
         id: "ai",
-        label: "AI assistant",
+        // Mirai fork: the assistant's name. It runs only through the user's own Claude Code
+        // sign-in (AGENTS.md, "Asistente Mirai"); `pdfcraft_ai::ASSISTANT_NAME` holds the same name.
+        label: "Mirai Assistant",
         icon: "sparkles",
         hue: PINK,
         badge: Some("Optional"),
         availability: Provider,
         sections: &[ToolSection {
-            title: "Bring your own model (off by default)",
+            title: "Uses your Claude Code sign-in; nothing is sent until you ask",
             items: &[
                 item("Summarize", "sparkles", "ai.summary", Provider),
                 item("Ask about this document", "message-circle-reply", "ai.ask", Provider),

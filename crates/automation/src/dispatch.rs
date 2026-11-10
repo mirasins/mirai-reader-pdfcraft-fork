@@ -73,6 +73,11 @@ impl Automation {
             "comment_image_preview" => return self.comment_image_preview(&a),
             "text_extract" => self.text_extract(&a)?,
             "text_word_count" => self.text_word_count(&a)?,
+            "assistant_status" => {
+                let status = pdfcraft_ai::status();
+                json!({ "name": pdfcraft_ai::ASSISTANT_NAME, "status": status.code(), "ready": status.is_ready(), "advice": status.advice() })
+            }
+            "assistant_ask" => self.assistant_ask(&a)?,
             "text_find" => self.text_find(&a)?,
             "page_rotate" => {
                 let degrees = a.int("degrees")?;

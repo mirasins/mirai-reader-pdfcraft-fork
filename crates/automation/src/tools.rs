@@ -1676,6 +1676,19 @@ pub fn tools() -> Vec<ToolDef> {
             .ro().with(schema(json!({"doc":doc()}), &[])),
         t("render_preview", "Render a preview", "Render a PNG bounded by max_side (default 1024), without changing or saving the document. Page defaults to 1; doc may be omitted when exactly one document is open. Render warnings follow the image as page_render gives them.")
             .ro().with(schema(json!({"doc":doc(),"page":{"type":"integer","minimum":1},"max_side":{"type":"integer","minimum":1,"maximum":4096}}), &[])),
+        t("assistant_status", "Mirai Assistant status", "Say whether Mirai Assistant can answer on this machine, and what to do if not. It uses the official Claude Code binary and the sign-in already made with it: not_installed, not_signed_in, disallowed_method (an API key or another provider is set up instead of a Claude account), unavailable, or ready. Read-only; sends no document text.")
+            .ro().with(schema(json!({}), &[])),
+        t("assistant_ask", "Ask Mirai Assistant", "Ask Mirai Assistant about a document's pages: summarize them, answer a question (task ask, with question), translate them (task translate, with language) or explain them. The selected pages' text (pages, default the first 500) is sent to Claude through the user's own Claude Code sign-in and nothing else: it refuses API keys and other providers, and it needs Claude Code installed and signed in, so call assistant_status first. Read-only: the document is not changed. Pages without text need OCR first. Returns the answer and how many pages were sent.")
+            .ro().with(schema(
+                json!({
+                    "doc": doc(),
+                    "task": { "type": "string", "enum": ["summarize", "ask", "translate", "explain"], "description": "summarize: the purpose and main points; ask: answer question; translate: translate into language; explain: explain the text in plain words." },
+                    "question": { "type": "string", "maxLength": 4000, "description": "The question to answer from the pages. Required when task is ask." },
+                    "language": { "type": "string", "maxLength": 4000, "description": "The language to translate into, e.g. French. Required when task is translate." },
+                    "pages": pages("to send (default: the first 500)")
+                }),
+                &["doc", "task"],
+            )),
     ]
 }
 

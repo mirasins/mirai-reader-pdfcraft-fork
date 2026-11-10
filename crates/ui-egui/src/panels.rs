@@ -9,6 +9,7 @@ use crate::theme::{self, Tokens};
 use crate::{LeftPanel, PdfCraftApp, RightPanel, icons, widgets};
 
 pub(super) mod all_tools_ui;
+pub(crate) mod assistant;
 mod bookmarks;
 pub(super) mod comments_panel;
 mod edit;

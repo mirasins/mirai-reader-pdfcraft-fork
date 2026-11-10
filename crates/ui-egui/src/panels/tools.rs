@@ -188,7 +188,7 @@ fn tool_row(ui: &mut egui::Ui, t: &Tokens, g: &ToolGroup, is_pinned: bool) -> (e
     let tip = match g.availability {
         Availability::Ready => tl!("Available").to_string(),
         Availability::Planned(m) => format!("{} {m} — {}", tl!("Planned for milestone"), tl!("open to see what it will include")),
-        Availability::Provider => tl!("Optional: needs an AI provider you configure").into(),
+        Availability::Provider => tl!("Optional: uses your Claude Code sign-in").into(),
     };
     let tip = if clipped { format!("{} — {tip}", tl!(g.label)) } else { tip };
     (theme::hand(resp).on_hover_text(tip), pin_clicked)
@@ -198,6 +198,10 @@ fn tool_row(ui: &mut egui::Ui, t: &Tokens, g: &ToolGroup, is_pinned: bool) -> (e
 fn tool_detail(app: &mut PdfCraftApp, ui: &mut egui::Ui, t: &Tokens, g: &'static ToolGroup) {
     if g.id == "edit" {
         edit_panel(app, ui, t, g);
+        return;
+    }
+    if g.id == "ai" {
+        super::assistant::assistant_panel(app, ui, t, g);
         return;
     }
     let (back, close) = panel_header(ui, t, g.label, Some(("chevron-left", tl!("Back to all tools"))));

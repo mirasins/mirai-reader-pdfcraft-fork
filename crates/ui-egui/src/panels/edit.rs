@@ -176,7 +176,7 @@ fn edit_row(ui: &mut egui::Ui, t: &Tokens, icon: &str, label: &str, availability
     match availability {
         Availability::Ready => resp,
         Availability::Planned(m) => resp.on_hover_text(format!("{} {m}", tl!("Planned for milestone"))),
-        Availability::Provider => resp.on_hover_text(tl!("Optional: needs an AI provider you configure")),
+        Availability::Provider => resp.on_hover_text(tl!("Optional: uses your Claude Code sign-in")),
     }
 }
 
