@@ -269,6 +269,13 @@ pub fn status() -> Status {
     }
 }
 
+/// Refuse early when the assistant can't be used, before a caller reads any page text for it.
+/// [`ask`] checks again before sending.
+pub fn ensure_ready() -> Result<(), AiError> {
+    let status = status();
+    if status.is_ready() { Ok(()) } else { Err(AiError::NotReady(status)) }
+}
+
 /// Answer `request` with the Claude Code found on this machine.
 pub fn ask(request: &Request, cancel: Option<&AtomicBool>) -> Result<String, AiError> {
     ClaudeCode::locate().ok_or(AiError::NotReady(Status::NotInstalled))?.run(request, cancel)

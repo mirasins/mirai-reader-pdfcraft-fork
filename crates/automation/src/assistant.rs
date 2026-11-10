@@ -45,6 +45,8 @@ impl Automation {
             None => (0..n.min(DEFAULT_PAGES)).collect(),
         };
 
+        // Before reading any page text: it is wasted work when the assistant can't be used.
+        pdfcraft_ai::ensure_ready().map_err(failed)?;
         let texts = self.page_texts(id, &pages)?;
         let mut sent = Vec::with_capacity(texts.len());
         for (p, text) in pages.iter().zip(texts) {

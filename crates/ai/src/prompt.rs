@@ -1,5 +1,7 @@
 //! What the assistant is asked, and the text it is given.
 
+use std::fmt::Write as _;
+
 use crate::AiError;
 
 /// The most document text sent in one request, in characters. Past it the text is cut at a page
@@ -60,9 +62,12 @@ pub fn build_prompt(request: &Request) -> Result<(String, String), AiError> {
         return Err(AiError::InvalidRequest("the pages have no text to read (a scanned page needs OCR first: Scan & OCR ▸ Recognize text)".into()));
     }
 
-    let mut doc = String::new();
+    let wanted = request.pages.iter().fold(0usize, |n, (_, t)| n.saturating_add(t.len()));
+    let mut doc = String::with_capacity(wanted.min(MAX_DOCUMENT_CHARS));
     let mut doc_chars = 0usize;
     let mut truncated_after = None;
+    // The page number of the last block appended.
+    let mut last_page: Option<u32> = None;
     for (page, text) in &request.pages {
         let block = format!("<page n=\"{page}\">\n{}\n</page>\n", text.trim());
         let block_chars = block.chars().count();
@@ -73,22 +78,24 @@ pub fn build_prompt(request: &Request) -> Result<(String, String), AiError> {
                 doc.push_str("\n</page>\n");
                 truncated_after = Some(*page);
             } else {
-                truncated_after = request.pages.iter().take_while(|(p, _)| p != page).last().map(|(p, _)| *p);
+                truncated_after = last_page;
             }
             break;
         }
         doc.push_str(&block);
         doc_chars = doc_chars.saturating_add(block_chars);
+        last_page = Some(*page);
     }
 
     let mut user = String::new();
+    // Writing to a String cannot fail, so the results are ignored.
     if let Some(title) = request.title.as_deref().map(str::trim).filter(|t| !t.is_empty()) {
-        user.push_str(&format!("Document: {}\n", title.chars().take(300).collect::<String>()));
+        let _ = writeln!(user, "Document: {}", title.chars().take(300).collect::<String>());
     }
     user.push_str(&instruction);
     user.push('\n');
     if let Some(p) = truncated_after {
-        user.push_str(&format!("Note: the document is long; only the text up to page {p} is included. Say so in your answer.\n"));
+        let _ = writeln!(user, "Note: the document is long; only the text up to page {p} is included. Say so in your answer.");
     }
     user.push_str("<document>\n");
     user.push_str(&doc);

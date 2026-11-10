@@ -93,9 +93,23 @@ struct Answer {
     heading: String,
     doc: DocId,
     body: Result<String, String>,
+    /// The `[p. N]` citations of an `Ok` body, found once when the answer arrives rather than on every frame.
+    cites: Vec<(std::ops::Range<usize>, u32)>,
 }
 
+/// The characters of a page's wrapper in the AI prompt (`<page n="">`, two newlines, `</page>`, a
+/// newline) without the page number. All ASCII, so bytes equal characters.
+const PAGE_WRAPPER_CHARS: usize = "<page n=\"\">\n\n</page>\n".len();
+
 impl Answer {
+    fn new(heading: String, doc: DocId, body: Result<String, String>) -> Self {
+        let cites = match &body {
+            Ok(text) => citations(text),
+            Err(_) => Vec::new(),
+        };
+        Self { heading, doc, body, cites }
+    }
+
     fn bytes(&self) -> usize {
         let body = match &self.body {
             Ok(s) | Err(s) => s.len(),
@@ -207,7 +221,7 @@ fn poll(st: &mut AssistantState, ctx: &egui::Context) {
     {
         // A failure may mean the sign-in changed; the user just acted, so look again now.
         let failed = body.is_err();
-        push_answer(&mut st.history, Answer { heading: run.heading, doc: run.doc, body });
+        push_answer(&mut st.history, Answer::new(run.heading, run.doc, body));
         if failed && !matches!(st.status, StatusSlot::Checking(_)) {
             start_status_check(st, ctx);
         }
@@ -342,7 +356,7 @@ fn draw(app: &mut PdfCraftApp, st: &mut AssistantState, ui: &mut egui::Ui, t: &T
                 ui.add_space(2.0);
                 match &answer.body {
                     Ok(text) => {
-                        if let Some(page) = answer_text(ui, t, text) {
+                        if let Some(page) = answer_text(ui, t, text, &answer.cites) {
                             go = Some(page);
                         }
                         ui.add_space(4.0);
@@ -509,7 +523,7 @@ fn collect_pages(
         let number = u32::try_from(number).map_err(|_| tl!("The page number is too large. Nothing was sent.").to_owned())?;
         // The AI prompt counts the page wrapper as well as trimmed text. Refuse before its
         // truncation would omit part of the selection without a reliable UI notice.
-        let wrapper = format!("<page n=\"{number}\">\n\n</page>\n").chars().count();
+        let wrapper = PAGE_WRAPPER_CHARS.saturating_add(number.checked_ilog10().map_or(1, |d| d as usize + 1));
         chars = chars.saturating_add(wrapper).saturating_add(text.trim().chars().count());
         if chars > pdfcraft_ai::MAX_DOCUMENT_CHARS {
             return Err(
@@ -543,14 +557,14 @@ fn start_run(app: &mut PdfCraftApp, st: &mut AssistantState, ctx: &egui::Context
     // `assistant_ask` tool refuse it too.
     if !doc.allows_copying() {
         let body = Err(tl!("This document does not allow copying its text, so the assistant can't read it.").to_owned());
-        push_answer(&mut st.history, Answer { heading, doc: id, body });
+        push_answer(&mut st.history, Answer::new(heading, id, body));
         return;
     }
     let source = doc.export_source();
     let pages = match selected_pages(st.scope, current, source.pages) {
         Ok(pages) => pages,
         Err(message) => {
-            push_answer(&mut st.history, Answer { heading, doc: id, body: Err(message) });
+            push_answer(&mut st.history, Answer::new(heading, id, Err(message)));
             return;
         }
     };
@@ -563,6 +577,7 @@ fn start_run(app: &mut PdfCraftApp, st: &mut AssistantState, ctx: &egui::Context
     let spawned = std::thread::Builder::new().name("mirai-assistant".into()).spawn(move || {
         let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             crate::i18n::set_current(lang);
+            pdfcraft_ai::ensure_ready().map_err(|e| e.to_string())?;
             let pages = collect(source, pages, &worker_cancel)?;
             pdfcraft_ai::ask(&Request { task, title, pages }, Some(&worker_cancel)).map_err(|e| e.to_string())
         }))
@@ -572,16 +587,17 @@ fn start_run(app: &mut PdfCraftApp, st: &mut AssistantState, ctx: &egui::Context
     });
     match spawned {
         Ok(_) => st.run = Some(Run { rx, cancel, pages: count, heading, doc: id, started: web_time::Instant::now() }),
-        Err(e) => push_answer(&mut st.history, Answer { heading, doc: id, body: Err(e.to_string()) }),
+        Err(e) => push_answer(&mut st.history, Answer::new(heading, id, Err(e.to_string()))),
     }
 }
 
 /// Draw the answer as selectable text with its `[p. N]` citations as links. Returns the 0-based
 /// page of a clicked citation.
-fn answer_text(ui: &mut egui::Ui, t: &Tokens, text: &str) -> Option<usize> {
-    let cites = citations(text);
+fn answer_text(ui: &mut egui::Ui, t: &Tokens, text: &str, cites: &[(std::ops::Range<usize>, u32)]) -> Option<usize> {
     let mut go = None;
     let mut offset = 0usize;
+    // Citations are sorted and never overlap, so one cursor walks them across all the lines.
+    let mut next = 0usize;
     for line in text.split('\n') {
         let end = offset + line.len();
         if line.trim().is_empty() {
@@ -590,7 +606,13 @@ fn answer_text(ui: &mut egui::Ui, t: &Tokens, text: &str) -> Option<usize> {
             ui.horizontal_wrapped(|ui| {
                 ui.spacing_mut().item_spacing.x = 0.0;
                 let mut at = offset;
-                for (range, page) in cites.iter().filter(|(r, _)| r.start >= offset && r.end <= end) {
+                // Skip what lies before this line (a citation that straddled the last one is dropped).
+                while cites.get(next).is_some_and(|(r, _)| r.start < offset) {
+                    next += 1;
+                }
+                // A citation that starts here but ends past the line is not drawn as a link.
+                while let Some((range, page)) = cites.get(next).filter(|(r, _)| r.end <= end) {
+                    next += 1;
                     if let Some(before) = text.get(at..range.start) {
                         ui.label(egui::RichText::new(before).color(t.text));
                     }
@@ -689,7 +711,7 @@ mod tests {
     }
 
     fn answer(text: &str) -> Answer {
-        Answer { heading: String::new(), doc: DocId(0), body: Ok(text.to_owned()) }
+        Answer::new(String::new(), DocId(0), Ok(text.to_owned()))
     }
 
     #[test]

@@ -95,6 +95,12 @@ fn a_cancel_set_before_the_run_starts_no_process() {
     assert_eq!(claude.run(&req(Task::Summarize, &[(1, "x")]), Some(&cancel)), Err(AiError::Cancelled));
 }
 
+#[test]
+fn ensure_ready_is_ok_or_not_ready_and_nothing_else() {
+    // Passes with or without Claude Code on this machine.
+    assert!(matches!(ensure_ready(), Ok(()) | Err(AiError::NotReady(_))));
+}
+
 // This fake CLI never reads real settings or credentials. A ready `auth status` in a separate
 // process cannot prove that the later prompt process won't load managed hooks or a different auth.
 fn fake_claude() -> (ClaudeCode, std::path::PathBuf) {
