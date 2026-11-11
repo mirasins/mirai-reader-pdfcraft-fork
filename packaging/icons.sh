@@ -22,13 +22,13 @@ render() {
 
 # Windows .ico: PNG-compressed entries, 16-256 px. The document icon has its own resource
 # in pdfcraft.exe; the app icon remains the first/default icon.
-for name in pdfcraft-document; do
-  ICO_PNGS=()
-  for s in 16 20 24 32 40 48 64 128 256; do
-    render "$DIR/$name.svg" "$s" "$TMP/$name-$s.png"
-    ICO_PNGS+=("$TMP/$name-$s.png")
-  done
-  python3 - "$DIR/$name.ico" "${ICO_PNGS[@]}" <<'PY'
+name=pdfcraft-document
+ICO_PNGS=()
+for s in 16 20 24 32 40 48 64 128 256; do
+  render "$DIR/$name.svg" "$s" "$TMP/$name-$s.png"
+  ICO_PNGS+=("$TMP/$name-$s.png")
+done
+python3 - "$DIR/$name.ico" "${ICO_PNGS[@]}" <<'PY'
 import struct, sys
 out, pngs = sys.argv[1], sys.argv[2:]
 blobs = [open(p, "rb").read() for p in pngs]
@@ -41,6 +41,5 @@ for b in blobs:
     offset += len(b)
 open(out, "wb").write(head + entries + data)
 PY
-done
 
 echo "icons written to $DIR"
