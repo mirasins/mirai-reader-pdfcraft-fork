@@ -1,6 +1,6 @@
 
 <p align="center">
-  <img src="assets/app-icon/hicolor/256x256/apps/ai.storyteller.pdfcraft.png" width="128" height="128" alt="PdfCraft icon: an engraved lion on a red tile">
+  <img src="assets/app-icon/hicolor/256x256/apps/ai.storyteller.pdfcraft.png" width="128" height="128" alt="Mirai Reader icon: a white eye on a purple document">
 </p>
 
 <h1 align="center">Mirai Reader</h1>
@@ -262,16 +262,11 @@ Documents restricted by their author show a clear notice, and PdfCraft honours t
 
 Press <kbd>⌘K</kbd> to search every tool and command, or browse the **All tools** catalogue. Tools that are still in development are marked with the milestone that will ship them.
 
-<table>
-<tr>
-<td width="50%"><img src="docs/images/pdfcraft-palette.png" alt="The command palette searching for 'page', listing Page grid, Page labels, Rotate pages, Insert pages, Delete pages, Extract pages and more, each with the tool it belongs to"></td>
-<td width="50%"><img src="docs/images/pdfcraft-tools.png" alt="The Welcome to PdfCraft home screen with recommended tools, a recent file, a privacy note, and the full tool catalogue in the side panel"></td>
-</tr>
-<tr>
-<td align="center"><sub>The <kbd>⌘K</kbd> command palette</sub></td>
-<td align="center"><sub>The home screen and the All tools catalogue</sub></td>
-</tr>
-</table>
+<p align="center">
+  <img src="docs/images/pdfcraft-palette.png" alt="The command palette searching for 'page', listing Page grid, Page labels, Rotate pages, Insert pages, Delete pages, Extract pages and more, each with the tool it belongs to" width="100%">
+  <br>
+  <sub>The <kbd>⌘K</kbd> command palette</sub>
+</p>
 
 ---
 
@@ -324,7 +319,7 @@ Edits stay in memory, undoable, until `doc_save`. Saving to the same file append
 
 Start the desktop app with `pdfcraft --control ~/.pdfcraft-control.json` and an agent can see and operate the real interface: the widget tree with labels and positions (from the accessibility tree), clicks, typing, keys, commands, view options and screenshots. This is also off by default. It listens only on loopback, and every connection must present the random token written to that file, which only you can read.
 
-Keep the control file in a folder only you can write, not a shared one such as `/tmp`: another user could create the file there first and receive your commands. `pdfcraft-cli ui` refuses a control file that is a symbolic link, and on macOS, Linux and FreeBSD one that another user owns or can read or write. The app doesn't start if it can't write the file.
+Keep the control file in a folder only you can write, not a shared one such as `/tmp`: another user could create the file there first and receive your commands. `pdfcraft-cli ui` refuses a control file that is a symbolic link, or one that another user owns, or that another user or a group such as Administrators can read or write: on macOS, Linux and FreeBSD by its owner and mode (the app writes it with mode 600), on Windows by its owner and access list (the app gives it one with only you and SYSTEM on it). The app doesn't start if it can't write the file. On Windows, cmd.exe doesn't expand `~`: use `%USERPROFILE%\.pdfcraft-control.json` there.
 
 ```sh
 pdfcraft-cli ui --control ~/.pdfcraft-control.json inspect query=rotate      # find widgets
@@ -390,8 +385,8 @@ PdfCraft is a clean-room implementation. Its behaviour comes from the ISO 32000 
 Building needs Rust 1.95 or later.
 
 ```sh
-git clone https://github.com/storytold/pdfcraft
-cd pdfcraft
+git clone https://github.com/mirasins/mirai-reader-pdfcraft-fork.git
+cd mirai-reader-pdfcraft-fork
 cargo xtask models                                # fetch the OCR models Scan & OCR needs (release builds include them)
 cargo run --release -p pdfcraft -- some.pdf     # desktop app
 cargo xtask demo-pdf                              # build the showcase PDF used in these screenshots
@@ -414,11 +409,10 @@ git clone https://github.com/storytold/craft-fonts ../craft-fonts
 CRAFT_FONTS_DIR=../craft-fonts cargo run --release -p pdfcraft -- some.pdf
 ```
 
-Each [GitHub release](https://github.com/storytold/pdfcraft/releases) has ready-made builds for macOS,
-Windows, Linux (AppImage, Flatpak, `.deb`, `.rpm` and a tarball), FreeBSD and the web; see
-[Downloads](#downloads). On Gentoo, the community [::snakebyte
-overlay](https://github.com/switch87/snakebyte-overlay) packages the Linux release as
-`app-text/pdfcraft-bin` (not maintained by the PdfCraft team):
+Mirai Reader releases are published separately from upstream; see [Downloads](#downloads). The
+upstream PdfCraft releases offer builds for macOS, Windows, Linux, FreeBSD and the web. On Gentoo,
+the community [::snakebyte overlay](https://github.com/switch87/snakebyte-overlay) packages the
+upstream Linux release as `app-text/pdfcraft-bin` (not maintained by the PdfCraft team):
 
 ```sh
 eselect repository add snakebyte git https://github.com/switch87/snakebyte-overlay.git
@@ -448,9 +442,9 @@ The summary is in **[ROADMAP.md](ROADMAP.md)**; the full assessment by dimension
 
 ## Downloads
 
-**New to PdfCraft?** Download it from the [PdfCraft page on getartcraft.com](https://getartcraft.com/apps/pdfcraft). That's the easiest way to install it.
+Download Mirai Reader from the fork's [releases](https://github.com/mirasins/mirai-reader-pdfcraft-fork/releases); check each release for its available files. The fork's Windows packaging process produces an MSI and a portable zip. Upstream's [releases](https://github.com/storytold/pdfcraft/releases) contain PdfCraft, not Mirai Reader.
 
-**Want a specific build or format?** On GitHub, the [latest release](https://github.com/storytold/pdfcraft/releases/latest) has every build listed below, and [all releases](https://github.com/storytold/pdfcraft/releases) has earlier versions and their notes. `<ver>` in the file names is the version number, and `SHA256SUMS.txt` lists a checksum for every file.
+Fork Windows packages are unsigned and may trigger SmartScreen. The MSI shares its install identity with upstream PdfCraft, so installing either may replace the other. See the [fork release channel](docs/release-channel.md) for details.
 
 ### Windows
 
@@ -460,16 +454,19 @@ The summary is in **[ROADMAP.md](ROADMAP.md)**; the full assessment by dimension
 | arm64 (Snapdragon and other ARM PCs) | `pdfcraft-<ver>-windows-arm64.msi` | `pdfcraft-<ver>-windows-arm64-portable.zip` |
 | x86 (32-bit) | `pdfcraft-<ver>-windows-x86.msi` | `pdfcraft-<ver>-windows-x86-portable.zip` |
 
-Installers and executables are code-signed.
+The table lists supported package names, not a guarantee that every architecture is published by the fork.
 
 The portable zip runs from any folder, a USB stick included. Its `portable.txt` keeps the settings,
 logs and crash recovery in a `PdfCraftData` folder next to `pdfcraft.exe`, so nothing is written to
 `%APPDATA%`; delete that file to use the normal per-user folders.
+Windows doesn't offer the portable copy as a default PDF app on its own, since it registers nothing;
+`portable.txt` has the PowerShell lines that register it for your user only, and how to undo them.
 
 The MSI installs for your account only by default, without administrator privileges. Choose
 "Everyone on this computer" on its first page, or pass `ALLUSERS=1` from an elevated terminal, to install
-for all users. It adds "Edit with PdfCraft"
-to the right-click menu of PDF files and "Create PDF with PdfCraft…" to the right-click menu of
+for all users. It adds "Edit with Mirai Reader"
+and "Combine files in Mirai Reader" (select several PDFs: they land in the Combine files tab of the
+running Mirai Reader) to the right-click menu of PDF files and "Create PDF with Mirai Reader…" to the right-click menu of
 images (.png .jpg .jpeg .tif .tiff .gif .bmp .jp2 .j2k .jpx) in File Explorer (on Windows 11, under
 "Show more options"), without changing which app opens them by default. For unattended deployment
 without a desktop shortcut (add `ALLUSERS=1`, from an elevated terminal, for an all-users install):
@@ -481,8 +478,8 @@ msiexec /i "pdfcraft-<ver>-windows-x64.msi" /qn /norestart INSTALLDESKTOPSHORTCU
 | Property | `=0` leaves out |
 |---|---|
 | `INSTALLDESKTOPSHORTCUT` | the desktop shortcut |
-| `INSTALLPDFCONTEXTMENU` | "Edit with PdfCraft" on PDF files |
-| `INSTALLIMAGECONTEXTMENU` | "Create PDF with PdfCraft…" on images |
+| `INSTALLPDFCONTEXTMENU` | "Edit with Mirai Reader" and "Combine files in Mirai Reader" on PDF files |
+| `INSTALLIMAGECONTEXTMENU` | "Create PDF with Mirai Reader…" on images |
 
 All three are on for a first install. An upgrade keeps what the installed version has: a shortcut
 or menu entry that is there stays, and one that is missing (left out at install, or a desktop
@@ -492,17 +489,21 @@ didn't have a menu yet (0.6.0 and earlier for the PDF menu, 0.2.1 and earlier fo
 adds it, as a first install would. Use the MSI for your architecture. Per-user installation
 overrides are not supported.
 
+To install somewhere other than the default `ArtCraft\PdfCraft` folder, change the folder on the
+welcome screen (type it, or Browse…) or pass it on the command line:
+`INSTALLFOLDER="D:\Apps\PdfCraft"`. It is installed for whoever the first screen chose (`ALLUSERS=1`
+on the command line for everyone). An upgrade keeps the folder the installed version uses unless
+the command line gives another one.
+
 **Pin the checksum, not just the version.** Release candidates of a version share its MSI version
 (MSI versions are numbers only, so 1.2.3-rc.1 and 1.2.3 are both 1.2.3), and the installer lets an
 MSI of the same version replace the installed one without asking. Two different `0.7.1` MSIs can't
-be told apart by version, so if your deployment tool checks the file, pin its SHA-256 from
-`SHA256SUMS.txt` (`Get-FileHash <file> -Algorithm SHA256`).
+be told apart by version, so if your deployment tool checks the file, pin its SHA-256 from the
+release asset's GitHub digest (`Get-FileHash <file> -Algorithm SHA256`).
 
-**Signing identities.** The Windows MSIs and both executables are signed through Azure Trusted
-Signing with a certificate issued to `Learning Machines Inc` (Atlanta, Georgia, US). The macOS app
-and command-line tool are signed with the Developer ID `Learning Machines LLC (DJ6XS33FX8)` and
-notarized. The MSI's manufacturer, shown as the publisher in Installed apps, is
-`Learning Machines LLC`.
+**Publisher.** The MSI's manufacturer, shown in Installed apps, is `Learning Machines LLC`.
+
+The following package formats describe **upstream PdfCraft**, not guaranteed Mirai Reader releases.
 
 ### macOS
 

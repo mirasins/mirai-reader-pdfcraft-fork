@@ -409,10 +409,10 @@ pub static TOOL_GROUPS: &[ToolGroup] = &[
             items: &[
                 item("Output preview", "layers", "prepress.output_preview", Planned("M11")),
                 item("Preflight", "file-check", "preflight.run", Planned("M11")),
-                item("Convert colors", "palette", "prepress.convert_colors", Planned("M11")),
+                item("Convert colours", "palette", "prepress.convert_colors", Ready),
                 item("Set page boxes", "square-dashed-mouse-pointer", "page.boxes", Ready),
-                item("Add printer marks", "ruler", "prepress.marks", Planned("M11")),
-                item("Fix hairlines", "minus", "prepress.hairlines", Planned("M11")),
+                item("Add printer marks", "ruler", "prepress.marks", Ready),
+                item("Fix hairlines", "minus", "prepress.hairlines", Ready),
             ],
         }],
     },
@@ -530,13 +530,15 @@ pub static TOOL_GROUPS: &[ToolGroup] = &[
     },
     ToolGroup {
         id: "ai",
-        label: "AI assistant",
+        // Mirai fork: the assistant's name. It runs only through the user's own Claude Code
+        // sign-in (AGENTS.md, "Asistente Mirai"); `pdfcraft_ai::ASSISTANT_NAME` holds the same name.
+        label: "Mirai Assistant",
         icon: "sparkles",
         hue: PINK,
         badge: Some("Optional"),
         availability: Provider,
         sections: &[ToolSection {
-            title: "Bring your own model (off by default)",
+            title: "Uses your Claude Code sign-in; nothing is sent until you ask",
             items: &[
                 item("Summarize", "sparkles", "ai.summary", Provider),
                 item("Ask about this document", "message-circle-reply", "ai.ask", Provider),

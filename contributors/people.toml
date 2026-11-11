@@ -40,6 +40,9 @@ real_name = "James Locke"
 display_name = "James Locke"
 sync_github_name = false
 
+[people.mirasins]
+sync_github_name = true
+
 [people.switch87]
 real_name = "Gert Pellin"
 display_name = "Gert Pellin"
@@ -186,3 +189,11 @@ sync_github_name = true
 
 [people.helenkwok]
 real_name = "Helen Kwok"
+
+[people.vangel76]
+real_name = "Valentin Klein"
+display_name = "vangel76"
+sync_github_name = false
+
+[people.enriquemelzer-bit]
+sync_github_name = true

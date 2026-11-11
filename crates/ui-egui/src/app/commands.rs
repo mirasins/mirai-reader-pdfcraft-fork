@@ -19,6 +19,11 @@ impl PdfCraftApp {
             self.execute(command);
             return;
         }
+        // Mirai Assistant's items open its panel; nothing is sent until a button there is pressed.
+        if matches!(command, "ai.summary" | "ai.ask" | "ai.translate") {
+            self.select_tool("ai");
+            return;
+        }
         // Not implemented yet: say which milestone ships it.
         let when = pdfcraft_engine::catalog::TOOL_GROUPS
             .iter()
@@ -26,7 +31,7 @@ impl PdfCraftApp {
             .find(|i| i.command == command)
             .map(|i| match i.availability {
                 pdfcraft_engine::catalog::Availability::Planned(m) => crate::i18n::fmt(tl!("ships in milestone {m}"), &[("m", m)]),
-                pdfcraft_engine::catalog::Availability::Provider => tl!("needs an AI provider (off by default)").to_string(),
+                pdfcraft_engine::catalog::Availability::Provider => tl!("needs Claude Code, signed in with your Claude account").to_string(),
                 pdfcraft_engine::catalog::Availability::Ready => tl!("is available").to_string(),
             })
             .unwrap_or_else(|| tl!("is not available yet").to_string());
@@ -61,6 +66,21 @@ impl PdfCraftApp {
     pub(crate) fn select_tool(&mut self, id: &'static str) {
         // The tool's panel shows, not the expanded All tools view over it.
         self.all_tools_full = false;
+        // Edit a PDF turns on Edit text & images at once, as the Edit tab does (`enter_mode`), so
+        // the page is editable without a second click. Leaving it for another tool from All tools
+        // puts editing down again; under the Edit tab the workspace keeps it, as before. Read mode
+        // hides the quick toolbar and keeps every tool down (`enter_mode`), so the control
+        // channel's `tool edit` there leaves editing off.
+        if id == "edit" {
+            if self.mode != Mode::Read {
+                self.quick_tool = QuickTool::EditText;
+            }
+        } else if self.mode != Mode::Edit
+            && self.left == LeftPanel::Tool("edit")
+            && matches!(self.quick_tool, QuickTool::EditText | QuickTool::AddText)
+        {
+            self.put_down_edit_text();
+        }
         self.left = LeftPanel::Tool(id);
         self.reveal_tools();
         if let Some(view) = self.active.and_then(|i| self.views.get_mut(i)) {

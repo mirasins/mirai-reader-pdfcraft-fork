@@ -188,7 +188,7 @@ fn tool_row(ui: &mut egui::Ui, t: &Tokens, g: &ToolGroup, is_pinned: bool) -> (e
     let tip = match g.availability {
         Availability::Ready => tl!("Available").to_string(),
         Availability::Planned(m) => format!("{} {m} — {}", tl!("Planned for milestone"), tl!("open to see what it will include")),
-        Availability::Provider => tl!("Optional: needs an AI provider you configure").into(),
+        Availability::Provider => tl!("Optional: uses your Claude Code sign-in").into(),
     };
     let tip = if clipped { format!("{} — {tip}", tl!(g.label)) } else { tip };
     (theme::hand(resp).on_hover_text(tip), pin_clicked)
@@ -198,6 +198,10 @@ fn tool_row(ui: &mut egui::Ui, t: &Tokens, g: &ToolGroup, is_pinned: bool) -> (e
 fn tool_detail(app: &mut PdfCraftApp, ui: &mut egui::Ui, t: &Tokens, g: &'static ToolGroup) {
     if g.id == "edit" {
         edit_panel(app, ui, t, g);
+        return;
+    }
+    if g.id == "ai" {
+        super::assistant::assistant_panel(app, ui, t, g);
         return;
     }
     let (back, close) = panel_header(ui, t, g.label, Some(("chevron-left", tl!("Back to all tools"))));
@@ -229,6 +233,10 @@ fn tool_detail(app: &mut PdfCraftApp, ui: &mut egui::Ui, t: &Tokens, g: &'static
     }
     // Prepare a form: Preview fills the form as a reader would; Edit goes back.
     if g.id == "form" {
+        if let Some(view) = app.active.and_then(|i| app.views.get_mut(i)) {
+            ui.add(widgets::checkbox(&mut view.prepare.show_tab_numbers, tl!("Show tab numbers")));
+            ui.add_space(4.0);
+        }
         ui.horizontal(|ui| {
             let label = if app.form_preview { "Edit fields" } else { "Preview" };
             if widgets::pill_button(ui, tl!(label), app.form_preview).on_hover_text(tl!("Try the form as people filling it in will see it")).clicked()
@@ -297,6 +305,9 @@ fn tool_detail(app: &mut PdfCraftApp, ui: &mut egui::Ui, t: &Tokens, g: &'static
             if let Some(cmd) = crate::fill_sign::signature_entries(ui, app, t) {
                 run = Some(cmd);
             }
+            // Where the signing happens, not only in Preferences, and once: not also in the Sign
+            // menu over the page, where it was easy to miss (#2149).
+            ui.add(widgets::checkbox(&mut app.flatten_fill_sign_on_save, tl!("Lock into the page when saving")));
         }
     });
     if footer {
