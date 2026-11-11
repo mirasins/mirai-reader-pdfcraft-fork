@@ -1,6 +1,6 @@
 
 <p align="center">
-  <img src="assets/app-icon/hicolor/256x256/apps/ai.storyteller.pdfcraft.png" width="128" height="128" alt="Mirai Reader icon: a white eye on a purple document">
+  <img src="assets/app-icon/hicolor/256x256/apps/ai.storyteller.pdfcraft.png" width="128" height="128" alt="Mirai Reader icon: an open book on a violet tile">
 </p>
 
 <h1 align="center">Mirai Reader</h1>
