@@ -1,34 +1,25 @@
 # Mirai Reader app icon
 
-<img src="pdfcraft-small.svg" alt="Mirai Reader app icon: a purple page with an eye on a deep night-purple tile" width="128">
+<img src="pdfcraft-small.svg" alt="Mirai Reader app icon: an open book on a violet tile" width="128">
 
-**Subject ("oceano morado"):** an upright page with a folded corner, an eye and two text lines.
+The **Mirai Reader icon**: an open book on a glossy violet tile, from the Mirai icon set supplied by
+the fork's owner (MIT OR Apache-2.0). It replaces upstream's engraved lion, which the Mirai fork does
+not ship.
 
-**Style:** flat shapes, no outline; the page has a diagonal purple gradient. No fonts or images.
+**Tile:** `viewBox="0 0 512 512"`, a rounded square of 418 px (`rx=116`) centred with a transparent
+margin, so it already sits on Apple's icon grid: every platform uses it as is.
 
-| Colour | Hex | Used for |
-|---|---|---|
-| Night purple | `#24183e` | the full-bleed field |
-| Lilac to Mirai purple | `#d2a3ff` → `#7042c7` | the page gradient |
-| Pale lilac | `#eddaff`, `#f2e7ff` | the folded corner, text lines |
-| White | `#ffffff` | the eye |
-
-**Tile:** `viewBox="0 0 512 512"`, a rounded square with `rx=118`. Windows and Linux icons use the
-full-bleed tile. macOS icons put it on Apple's grid (an 824 px body centred on a transparent 1024 px
-canvas).
-
-**Provenance:** original work for the Mirai fork, drawn directly as SVG. It replaces upstream's engraved
-lion, which the Mirai fork does not ship. The PNG, `.ico` and `.icns` files were rendered from a 1024 px
-raster of the master, since the gradient needs a full SVG renderer (resvg handles it).
+**Masters:** `pdfcraft.svg` and `pdfcraft-1024.png`, both as supplied. The smaller PNGs, the `.ico`
+and the `.icns` are scaled from the PNG (the SVG's gradients and transparency need a full renderer).
 Licence: [LICENSE.txt](LICENSE.txt) (`MIT OR Apache-2.0`, like the repo).
 
 ## Files
 
 | File | What it is |
 |---|---|
-| `pdfcraft.svg` | the master vector; every PNG, `.ico` and `.icns` is rendered from it |
+| `pdfcraft.svg` | the master vector, as supplied |
 | `pdfcraft-small.svg` | a copy of the master, kept as its own file for the README and the in-app mark |
-| `pdfcraft-1024.png` | 1024 px on Apple's grid; also the runtime Dock icon on macOS |
+| `pdfcraft-1024.png` | the 1024 px master, as supplied; every smaller PNG, the `.ico` and the `.icns` are scaled from it; also the runtime Dock icon on macOS |
 | `pdfcraft.icns` | macOS icon (16–1024 px) |
 | `pdfcraft.ico` | Windows icon (16–256 px), embedded in `pdfcraft.exe` by `apps/pdfcraft/build.rs` |
 | `pdfcraft-document.svg` | Windows PDF file icon master: a Lucide document outline, red badge and outlined PDF lettering; no font dependency |
@@ -49,6 +40,7 @@ sidecar. This provides a file type icon; first-page thumbnails still need a thum
 ## Regenerate
 
 ```sh
-packaging/icons.sh        # needs resvg and python3; iconutil (macOS) for the .icns
+packaging/app-icon.sh     # the app icon; needs Python 3 with Pillow
+packaging/icons.sh        # the PDF document icon; needs resvg and python3
 cargo xtask assets        # then update the sha256 values in ATTRIBUTION.toml and run with --write
 ```
