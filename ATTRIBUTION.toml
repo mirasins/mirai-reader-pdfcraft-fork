@@ -2852,7 +2852,7 @@ licence = "MIT OR Apache-2.0"
 licence_file = "assets/app-icon/LICENSE.txt"
 kind = "image"
 usage = "Finder window of the macOS DMG; rendered to background.tiff by packaging/macos/dmg/generate.py"
-sha256 = "182663e4d1c4fabbb7ab2e1f0d4e991a8e0859b4a8dee6934d3e25d77ea020af"
+sha256 = "cbef52db33b1aeb7366bbdb013b9e564e377280a089031796cc2a8155b35bfe1"
 
 
 [[asset]]
@@ -2863,8 +2863,8 @@ source = "Rendered from packaging/macos/dmg/background.svg by packaging/macos/dm
 licence = "MIT OR Apache-2.0"
 licence_file = "assets/app-icon/LICENSE.txt"
 kind = "image"
-usage = "1x + 2x HiDPI 16-colour palette TIFF copied into the macOS DMG by packaging/macos/package.sh; includes the app icon and the free LittleCMS built-in sRGB profile"
-sha256 = "bedf1b23707b9e34157440e83f65464ff314fa9f6b1d39c7a8930d1645c2f8be"
+usage = "1x + 2x HiDPI 256-colour palette TIFF copied into the macOS DMG by packaging/macos/package.sh; includes the app icon and the free LittleCMS built-in sRGB profile"
+sha256 = "2e6fac45cf0f4852d9aeec4e351b7b15fabed7b815c307c10d6f2ede33fd3e4c"
 
 [[fetched]]
 file = "text-detection.onnx"
