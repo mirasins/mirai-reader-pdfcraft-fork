@@ -95,7 +95,21 @@ try {
     $ts = if ($env:WINDOWS_TIMESTAMP_URL) { $env:WINDOWS_TIMESTAMP_URL } else { 'http://timestamp.acs.microsoft.com' }
     Invoke-SignTool ($common + @('/tr', $ts, '/dlib', $dlib.FullName, '/dmdf', $metadata) + $Files)
   }
-  Invoke-SignTool (@('verify', '/pa', '/v') + $Files)
+  try {
+    Invoke-SignTool (@('verify', '/pa', '/v') + $Files)
+  }
+  catch {
+    # The fork signs with a self-signed certificate: signtool signs, but `verify /pa` rejects a
+    # chain that ends in an untrusted root. Accept only that case, file by file; an unsigned file,
+    # a hash mismatch or a certificate issued by someone else still fails the build.
+    foreach ($file in $Files) {
+      $sig = Get-AuthenticodeSignature -FilePath $file
+      $cert = $sig.SignerCertificate
+      $untrustedRoot = $sig.Status -eq 'UnknownError' -or $sig.Status -eq 'NotTrusted'
+      if (-not $cert -or $cert.Subject -ne $cert.Issuer -or -not $untrustedRoot) { throw }
+    }
+    Write-Warn "Signed with a self-signed certificate, which Windows does not trust: $($Files -join ', ')"
+  }
 }
 finally {
   Remove-Item -Recurse -Force $tmp -ErrorAction SilentlyContinue
