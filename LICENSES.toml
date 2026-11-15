@@ -16,7 +16,7 @@ sha256 = "cd7032ea33b71427f188e34ffb4aee9d6868a57fd196037c5c8b2be03a2a0352"
 [[document]]
 source = "NOTICE"
 destination = "NOTICE"
-sha256 = "2d06c3c0c943680aad7a0aff174bdc2bb349db845cf173a59fe9bee8ac18acb0"
+sha256 = "e5500b29444895153ab23b91481cd6d50317a4c3d5513f9d0d4d4e332eb30be4"
 
 [[document]]
 source = "vendor/edit-session/LICENSE-MIT"
@@ -184,3 +184,9 @@ crate = "icu_segmenter_data"
 path = "data/segmenter_dictionary_extended_v1.rs.data"
 licence = "Unicode-3.0"
 documents = ["licenses/ICU4X-LICENSE.txt"]
+
+[[bundled]]
+crate = "craft-prc"
+path = "src/acof/table.rs"
+licence = "MIT"
+documents = ["licenses/prc-rs-LICENSE.txt"]

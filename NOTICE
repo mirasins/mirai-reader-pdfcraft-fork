@@ -43,6 +43,12 @@ list (author, source, license) is in ATTRIBUTION.md.
 
 Required notices:
 
+  jpeg-encoder 0.6.1, via craft-image-codecs, contains a Rust port of the JPEG
+  forward DCT from mozjpeg. This software is based in part on the work of
+  the Independent JPEG Group. The copyright, warranty disclaimer and
+  distribution conditions are retained in jpeg-encoder's src/fdct.rs:
+  https://github.com/vstroebel/jpeg-encoder/blob/v0.6.1/src/fdct.rs
+
   Foxit standard-14 substitute fonts (vendor/hayro-interpret/assets/*.pfb):
     Copyright 2014 PDFium Authors. All rights reserved. Original code copyright 2014 Foxit Software Inc.
     Redistributed under the BSD-3-Clause licence in vendor/hayro-interpret/assets/LICENSE_FOXIT.
