@@ -2,16 +2,8 @@
 # (GitHub has no FreeBSD runners). GPU tests skip themselves when the VM has no adapter.
 name: FreeBSD
 
+# Opt in explicitly: releases and routine CI do not run FreeBSD.
 on:
-  push:
-    branches: [main]
-  pull_request:
-    paths:
-      - Cargo.toml
-      - Cargo.lock
-      - "**/Cargo.toml"
-      - .github/workflows/freebsd.yml
-      - packaging/freebsd/**
   workflow_dispatch:
 
 concurrency:
