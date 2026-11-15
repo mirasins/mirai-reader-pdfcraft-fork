@@ -109,6 +109,9 @@ try {
       if (-not $cert -or $cert.Subject -ne $cert.Issuer -or -not $untrustedRoot) { throw }
     }
     Write-Warn "Signed with a self-signed certificate, which Windows does not trust: $($Files -join ', ')"
+    # signtool verify left exit code 1 behind; the callers' steps end on it, so clear it once the
+    # self-signed case is accepted.
+    $global:LASTEXITCODE = 0
   }
 }
 finally {
