@@ -1201,6 +1201,15 @@ dependencies = [
 [[package]]
 name = "craft-cms"
 version = "0.1.0"
+source = "git+https://github.com/storytold/craft-libs?rev=8503f24cb845268f47f97e829491114fe9ad1bfa#8503f24cb845268f47f97e829491114fe9ad1bfa"
+dependencies = [
+ "md-5 0.10.6",
+ "rayon",
+]
+
+[[package]]
+name = "craft-cms"
+version = "0.1.0"
 source = "git+https://github.com/storytold/craft-libs?rev=e2dc681a3#e2dc681a3ad8a47038da2f11ddd2c5e1c0454991"
 dependencies = [
  "md-5 0.10.6",
@@ -1307,6 +1316,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "craft-mime"
+version = "0.1.0"
+source = "git+https://github.com/storytold/craft-libs?rev=f29e82f1a7a009e68312bd2e84adab72be23344d#f29e82f1a7a009e68312bd2e84adab72be23344d"
+dependencies = [
+ "chrono",
+ "craft-codepage",
+ "encoding_rs",
+]
+
+[[package]]
 name = "craft-opc"
 version = "0.1.0"
 source = "git+https://github.com/storytold/craft-libs?rev=e2dc681a3#e2dc681a3ad8a47038da2f11ddd2c5e1c0454991"
@@ -1320,18 +1339,51 @@ dependencies = [
 [[package]]
 name = "craft-pdf"
 version = "0.1.0"
-source = "git+https://github.com/storytold/craft-libs?rev=e2dc681a3#e2dc681a3ad8a47038da2f11ddd2c5e1c0454991"
+source = "git+https://github.com/storytold/craft-libs?rev=8e03cd016d42032b867fef6bad86bc69bf2c1920#8e03cd016d42032b867fef6bad86bc69bf2c1920"
 dependencies = [
  "aes",
  "chrono",
  "craft-stream-codecs",
  "flate2",
+ "hayro-syntax",
  "js-sys",
  "md-5 0.11.0",
  "sha2 0.11.1",
  "stringprep",
  "thiserror 2.0.21",
  "wasm-bindgen",
+ "zeroize",
+]
+
+[[package]]
+name = "craft-pkcs7"
+version = "0.1.0"
+source = "git+https://github.com/storytold/craft-libs?rev=2284a6bf76b3d629b5e5bb2ca71e1c319d8dae5f#2284a6bf76b3d629b5e5bb2ca71e1c319d8dae5f"
+dependencies = [
+ "aes",
+ "aws-lc-rs",
+ "base64 0.23.1",
+ "bp256",
+ "bp384",
+ "cbc",
+ "chrono",
+ "crypto-bigint",
+ "des",
+ "ecdsa",
+ "ed25519-dalek",
+ "getrandom 0.4.3",
+ "hmac",
+ "p256",
+ "p384",
+ "p521",
+ "pbkdf2",
+ "rc2",
+ "ripemd",
+ "rsa",
+ "sha1 0.11.0",
+ "sha2 0.11.1",
+ "sha3",
+ "thiserror 2.0.21",
  "zeroize",
 ]
 
@@ -1381,11 +1433,11 @@ dependencies = [
 [[package]]
 name = "craft-stream-codecs"
 version = "0.1.0"
-source = "git+https://github.com/storytold/craft-libs?rev=e2dc681a3#e2dc681a3ad8a47038da2f11ddd2c5e1c0454991"
+source = "git+https://github.com/storytold/craft-libs?rev=8e03cd016d42032b867fef6bad86bc69bf2c1920#8e03cd016d42032b867fef6bad86bc69bf2c1920"
 dependencies = [
  "fax",
  "hayro-ccitt",
- "hayro-jbig2",
+ "hayro-jbig2 0.3.0 (git+https://github.com/storytold/craft-libs?rev=8e03cd016d42032b867fef6bad86bc69bf2c1920)",
  "thiserror 2.0.21",
 ]
 
@@ -2938,6 +2990,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "hayro-jbig2"
+version = "0.3.0"
+source = "git+https://github.com/storytold/craft-libs?rev=8e03cd016d42032b867fef6bad86bc69bf2c1920#8e03cd016d42032b867fef6bad86bc69bf2c1920"
+dependencies = [
+ "hayro-ccitt",
+]
+
+[[package]]
 name = "hayro-jpeg2000"
 version = "0.3.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2956,7 +3016,7 @@ version = "0.7.2"
 dependencies = [
  "flate2",
  "hayro-ccitt",
- "hayro-jbig2",
+ "hayro-jbig2 0.3.0",
  "hayro-jpeg2000",
  "memchr",
  "rustc-hash 2.1.3",
@@ -4555,7 +4615,7 @@ name = "pdfcraft-automation"
 version = "0.21.1-mirai.1"
 dependencies = [
  "base64 0.23.1",
- "craft-cms",
+ "craft-cms 0.1.0 (git+https://github.com/storytold/craft-libs?rev=e2dc681a3)",
  "craft-image-codecs",
  "craft-prc",
  "flate2",
@@ -4601,8 +4661,8 @@ version = "0.21.1-mirai.1"
 name = "pdfcraft-content"
 version = "0.21.1-mirai.1"
 dependencies = [
+ "craft-pdf",
  "hayro-syntax",
- "pdfcraft-cos",
 ]
 
 [[package]]
@@ -4671,7 +4731,7 @@ name = "pdfcraft-engine"
 version = "0.21.1-mirai.1"
 dependencies = [
  "chrono",
- "craft-cms",
+ "craft-cms 0.1.0 (git+https://github.com/storytold/craft-libs?rev=e2dc681a3)",
  "craft-docpath",
  "craft-image-codecs",
  "craft-tiff",
@@ -4715,6 +4775,7 @@ dependencies = [
 name = "pdfcraft-export"
 version = "0.21.1-mirai.1"
 dependencies = [
+ "craft-mime",
  "craft-opc",
  "craft-rtf",
  "craft-xml",
@@ -4868,6 +4929,7 @@ dependencies = [
 name = "pdfcraft-preflight"
 version = "0.21.1-mirai.1"
 dependencies = [
+ "craft-cms 0.1.0 (git+https://github.com/storytold/craft-libs?rev=8503f24cb845268f47f97e829491114fe9ad1bfa)",
  "craft-xml",
  "flate2",
  "pdfcraft-content",
@@ -4879,7 +4941,7 @@ dependencies = [
 name = "pdfcraft-print"
 version = "0.21.1-mirai.1"
 dependencies = [
- "craft-cms",
+ "craft-cms 0.1.0 (git+https://github.com/storytold/craft-libs?rev=e2dc681a3)",
  "craft-print",
  "log",
  "pdfcraft-content",
@@ -4950,6 +5012,7 @@ dependencies = [
  "bp384",
  "cbc",
  "chrono",
+ "craft-pkcs7",
  "crypto-bigint",
  "des",
  "ecdsa",
@@ -7152,7 +7215,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "32497e9a4c7b38532efcdebeef879707aa9f794296a4f0244f6f69e9bc8574bd"
 dependencies = [
  "fastrand",
- "getrandom 0.4.3",
+ "getrandom 0.3.4",
  "once_cell",
  "rustix 1.1.6",
  "windows-sys 0.61.2",
