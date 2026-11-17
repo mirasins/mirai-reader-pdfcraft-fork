@@ -62,6 +62,12 @@ ignore = [
     { id = "RUSTSEC-2026-0370", reason = "zvariant unmaintained; Linux a11y stack via accesskit_unix" },
     { id = "RUSTSEC-2026-0371", reason = "zbus_names unmaintained; Linux a11y stack via accesskit_unix" },
     { id = "RUSTSEC-2026-0372", reason = "zvariant_derive unmaintained; Linux a11y stack via accesskit_unix" },
+    # chrono is unmaintained (RUSTSEC-2026-0543; every version, no safe upgrade). The Rust house
+    # rules require date/time conversion to go through chrono, and PdfCraft uses it directly in
+    # engine, js, sign and ui-egui, so it stays until a maintained successor is agreed in craft-libs.
+    # Nothing here reaches it over the network: the advisory names no vulnerability, only the end of
+    # maintenance. Revisit when craft-libs and the house rules move to jiff or time.
+    { id = "RUSTSEC-2026-0543", reason = "chrono is required by the house rules; no safe upgrade exists" },
 ]
 
 # egui's default UI fonts (Ubuntu-Light, Hack, emoji-icon-font): font licences on the AGENTS.md
