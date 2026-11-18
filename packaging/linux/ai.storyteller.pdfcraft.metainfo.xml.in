@@ -12,17 +12,19 @@
   </developer>
   <description>
     <p>
-      PdfCraft is an open-source PDF workbench. Read, comment on, fill in and sign PDFs;
-      organize, combine and split pages; edit, redact, protect and export documents.
+      Mirai Reader is an independent fork of PDFCraft by Storytold, part of ArtCraft.
+      Read, comment on, fill in and sign PDFs; organize, combine and split pages;
+      edit, redact, protect and export documents.
     </p>
   </description>
   <launchable type="desktop-id">ai.storyteller.pdfcraft.desktop</launchable>
   <icon type="stock">ai.storyteller.pdfcraft</icon>
   <!-- Only url types known to appstream 0.15 (Ubuntu 22.04, where CI validates): no vcs-browser. -->
-  <url type="homepage">https://getartcraft.com/apps/pdfcraft</url>
-  <url type="bugtracker">https://github.com/storytold/pdfcraft/issues</url>
-  <url type="help">https://github.com/storytold/pdfcraft</url>
-  <url type="contact">https://discord.gg/artcraft</url>
+  <!-- The fork's own surfaces: the repository, its issues and the owner's community. -->
+  <url type="homepage">https://github.com/mirasins/mirai-reader-pdfcraft-fork</url>
+  <url type="bugtracker">https://github.com/mirasins/mirai-reader-pdfcraft-fork/issues</url>
+  <url type="help">https://github.com/mirasins/mirai-reader-pdfcraft-fork/issues</url>
+  <url type="contact">https://github.com/mirasins</url>
   <categories>
     <category>Office</category>
     <category>Viewer</category>

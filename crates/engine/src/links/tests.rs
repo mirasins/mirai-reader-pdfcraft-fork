@@ -111,10 +111,17 @@ fn remote_document_paths_to_other_computers_and_devices_are_refused() {
 }
 
 #[test]
-fn urls_follow_the_artcraft_scheme() {
-    assert_eq!(super::APP_PAGE, format!("{}/apps/{}", super::WEBSITE, super::APP));
-    // Mirai fork: the source link names the fork's repository (docs/release-channel.md).
+fn urls_follow_the_fork_and_upstream_scheme() {
+    // The fork's own surfaces: community, issues and source all live under the owner's GitHub.
+    assert_eq!(super::COMMUNITY, "https://github.com/mirasins");
     assert_eq!(super::GITHUB, format!("https://github.com/mirasins/mirai-reader-{}-fork", super::APP));
+    assert_eq!(super::ISSUES, format!("{}/issues", super::GITHUB));
+    // The upstream credit: the original project, its suite and its app page keep their links,
+    // clearly named as ArtCraft's (docs/release-channel.md).
+    assert_eq!(super::UPSTREAM, format!("https://github.com/storytold/{}", super::APP));
+    assert_eq!(super::APP_PAGE, format!("{}/apps/{}", super::WEBSITE, super::APP));
+    assert_eq!(super::WEBSITE, "https://getartcraft.com");
+    assert_eq!(super::DISCORD, "https://discord.gg/artcraft");
     for l in super::LINKS {
         assert!(l.url.starts_with("https://"), "{}", l.url);
         assert!(crate::commands::command(l.command).is_some(), "{} is a registered command", l.command);

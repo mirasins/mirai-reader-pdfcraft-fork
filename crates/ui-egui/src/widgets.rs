@@ -693,6 +693,10 @@ pub fn progress_notice(app: &PdfCraftApp, ctx: &egui::Context) -> bool {
 
 /// The suite's name where upstream draws the ArtCraft wordmark. The Mirai fork ships no ArtCraft
 /// brand files (upstream asks forks to remove them), so this is the word "Mirai" set as text.
+/// Unused in the fork's own About, which replaces upstream's "Part of" line with the upstream
+/// credit (`brand::UPSTREAM_CREDIT`); kept because upstream still draws the wordmark there, and
+/// merging that code calls this.
+#[allow(dead_code)]
 pub fn artcraft_logo(ui: &mut egui::Ui, height: f32) -> Response {
     ui.label(egui::RichText::new("Mirai").font(theme::semibold(height)))
 }
@@ -707,14 +711,16 @@ pub fn artcraft_mark(ui: &mut egui::Ui, size: f32) -> Response {
     )
 }
 
-/// Buttons for every community link (`pdfcraft_engine::links`), Discord first and prominent.
-/// Returns the registry command of the one clicked.
+/// Buttons for every community link (`pdfcraft_engine::links`), the Mirai community first and
+/// prominent. Returns the registry command of the one clicked. The first button says "Join our
+/// community" rather than the link's own label, so the Home card's title and button stay apart
+/// (the Help menu keeps the link's label).
 pub fn community_links(ui: &mut egui::Ui) -> Option<&'static str> {
     let mut clicked = None;
     ui.horizontal_wrapped(|ui| {
         ui.spacing_mut().item_spacing = vec2(8.0, 8.0);
         for (i, l) in pdfcraft_engine::links::LINKS.iter().enumerate() {
-            let resp = if i == 0 { icon_pill(ui, l.icon, tl!("Join our Discord"), true) } else { icon_pill(ui, l.icon, tl!(l.label), false) };
+            let resp = if i == 0 { icon_pill(ui, l.icon, tl!("Join our community"), true) } else { icon_pill(ui, l.icon, tl!(l.label), false) };
             if resp.on_hover_text(l.url).clicked() {
                 clicked = Some(l.command);
             }

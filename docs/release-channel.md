@@ -24,6 +24,11 @@ upstream's. The releases page (`crates/ui-egui/src/platform/updates.rs`) and the
 (`crates/engine/src/links.rs`) name the fork too. `crates/ui-egui/tests/it/fork_release.rs` pins
 all three.
 
+Community and support links (`crates/engine/src/links.rs`) also point at the fork's owner —
+the Mirai community is `github.com/mirasins` and issues go to the fork's tracker — while the
+About dialog and the README credit the original project by name, with its links, kept apart from
+the fork's own.
+
 ## Cutting a release
 
 Fork releases are built locally; GitHub Actions is not used for them.

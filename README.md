@@ -24,13 +24,14 @@
 </p>
 
 <p align="center">
-  <a href="https://discord.gg/artcraft"><img alt="Join the ArtCraft community on Discord" src="https://img.shields.io/badge/Join%20us%20on%20Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white" height="40"></a>
+  <a href="https://github.com/mirasins"><img alt="Join the Mirai community on GitHub" src="https://img.shields.io/badge/Join%20us%20on%20GitHub-181717?style=for-the-badge&logo=github&logoColor=white" height="40"></a>
 </p>
 
 <p align="center">
-  <a href="https://getartcraft.com/apps/pdfcraft"><b>PdfCraft on getartcraft.com</b></a> ·
-  <a href="https://getartcraft.com/">ArtCraft</a> ·
-  <a href="https://getartcraft.com/apps">All Crafting Apps</a>
+  <a href="https://github.com/mirasins/mirai-reader-pdfcraft-fork"><b>Mirai Reader on GitHub</b></a> ·
+  <a href="https://github.com/mirasins/mirai-reader-pdfcraft-fork/issues">Issues</a> ·
+  <a href="https://github.com/mirasins/mirai-reader-pdfcraft-fork/releases">Releases</a> ·
+  Upstream: <a href="https://github.com/storytold/pdfcraft">PDFCraft</a>
 </p>
 
 <br>
@@ -42,8 +43,11 @@
 </p>
 
 > [!NOTE]
-> **ArtCraft is a community of artists from all walks of life.** Digital, generative, music,
-> games &mdash; if you make things, you're one of us. **[Come say hi on Discord](https://discord.gg/artcraft).**
+> **Mirai Reader is an independent community fork, maintained by
+> [mirasins](https://github.com/mirasins).** Get help, share feedback and follow development on
+> **[GitHub](https://github.com/mirasins)**. It is **[based on PDFCraft by
+> Storytold](https://github.com/storytold/pdfcraft), part of
+> [ArtCraft](https://getartcraft.com)**, and is not affiliated with them.
 
 <p align="center">
   <a href="#highlights">Highlights</a> ·
@@ -66,11 +70,22 @@
 
 ## Community
 
-PdfCraft is part of [ArtCraft](https://getartcraft.com). Come say hello, get help and follow development:
+Mirai Reader is maintained by [mirasins](https://github.com/mirasins). Come say hello, get help and follow development:
 
-- **Discord: [discord.gg/artcraft](https://discord.gg/artcraft)**. This is the fastest way to get help and share feedback. The app has a Discord button in its title bar.
-- **Web page:** [getartcraft.com/apps/pdfcraft](https://getartcraft.com/apps/pdfcraft)
-- **Source:** [github.com/storytold/pdfcraft](https://github.com/storytold/pdfcraft)
+- **Community and support: [github.com/mirasins](https://github.com/mirasins)**. This is the fastest way to get help and share feedback. The app has a community button in its title bar.
+- **Issues: [mirasins/mirai-reader-pdfcraft-fork/issues](https://github.com/mirasins/mirai-reader-pdfcraft-fork/issues)**
+- **Source: [mirasins/mirai-reader-pdfcraft-fork](https://github.com/mirasins/mirai-reader-pdfcraft-fork)**
+
+## Original project
+
+Mirai Reader is **based on [PDFCraft](https://github.com/storytold/pdfcraft) by
+[Storytold](https://getartcraft.com), part of [ArtCraft](https://getartcraft.com)** — a clean-room,
+open-source PDF workbench the fork builds on, with gratitude. Mirai is an independent fork and is
+not affiliated with or endorsed by the ArtCraft team.
+
+- **Upstream source:** [github.com/storytold/pdfcraft](https://github.com/storytold/pdfcraft)
+- **Upstream page:** [getartcraft.com/apps/pdfcraft](https://getartcraft.com/apps/pdfcraft)
+- **Upstream community:** [discord.gg/artcraft](https://discord.gg/artcraft)
 
 This Mirai fork does not include the ArtCraft name, wordmark or logos (ArtCraft Team trademarks), which upstream asks forks to remove.
 
@@ -543,9 +558,10 @@ Every other Linux build needs glibc 2.35 or newer (Ubuntu 22.04+, Debian 12+, Fe
 
 ## The Crafting Apps
 
-PdfCraft is one of the **Crafting Apps**: free, open-source creative tools from the
+Upstream **PDFCraft** is one of the **Crafting Apps**: free, open-source creative tools from the
 [ArtCraft](https://getartcraft.com/) team, each written from scratch in Rust and each able to
-stand on its own.
+stand on its own. They are the original project's family, listed here as credit; Mirai Reader
+stands apart from them.
 
 | | App | What it's for | Code | Learn more |
 |:-:|---|---|---|---|
@@ -566,28 +582,34 @@ stand on its own.
 | <img src="https://raw.githubusercontent.com/storytold/craft-anything/main/assets/app-icon/hicolor/64x64/apps/ai.storyteller.craft-anything.png" alt="" width="32" height="32"> | **Craft Anything** | See how any software works, then build your own | [GitHub](https://github.com/storytold/craft-anything) | [Website](https://getartcraft.com/apps/craft-anything) |
 | <img src="https://raw.githubusercontent.com/tangency-labs/solidcraft/main/assets/icons/app/linux/exports/hicolor/64x64/apps/io.tangencylabs.solidcraft.png" alt="" width="32" height="32"> | **SolidCraft** | Parametric 3D CAD by Tangency Labs (community app) | [GitHub](https://github.com/tangency-labs/solidcraft) | |
 
-And [**ArtCraft**](https://getartcraft.com/) itself, our AI image and video studio for artists who want real control.
+And [**ArtCraft**](https://getartcraft.com/) itself, the original team's AI image and video studio for artists who want real control.
 
 <br>
 
 <p align="center">
-  <a href="https://discord.gg/artcraft"><img alt="Join the ArtCraft community on Discord" src="https://img.shields.io/badge/Join%20us%20on%20Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white" height="40"></a>
+  <a href="https://github.com/mirasins"><img alt="Join the Mirai community on GitHub" src="https://img.shields.io/badge/Join%20us%20on%20GitHub-181717?style=for-the-badge&logo=github&logoColor=white" height="40"></a>
 </p>
 
 <h3 align="center">Come make things with us</h3>
 
 <p align="center">
-  Our Discord is where artists of every kind hang out: people who paint, shoot, draw, cut film,
-  set type, and people still figuring out what they like to make. Share what you're working on,
-  ask for help, tell us what's broken, or tell us what you wish these tools could do.
-  Whatever your medium and however long you've been at it, you're welcome here.
+  The Mirai community lives on GitHub. Share what you're working on, ask for help, tell us
+  what's broken, or tell us what you wish this reader could do. Whatever your medium and however
+  long you've been at it, you're welcome here.
 </p>
 
 <p align="center">
-  <a href="https://discord.gg/artcraft"><b>discord.gg/artcraft</b></a> ·
-  <a href="https://getartcraft.com/">getartcraft.com</a> ·
-  <a href="https://getartcraft.com/apps">The Crafting Apps</a> ·
-  <a href="https://getartcraft.com/apps/pdfcraft">PdfCraft</a>
+  <a href="https://github.com/mirasins"><b>github.com/mirasins</b></a> ·
+  <a href="https://github.com/mirasins/mirai-reader-pdfcraft-fork/issues">Issues</a> ·
+  <a href="https://github.com/mirasins/mirai-reader-pdfcraft-fork">Source</a>
+</p>
+
+<p align="center">
+  <sub>Mirai Reader is based on <a href="https://github.com/storytold/pdfcraft">PDFCraft</a> by
+  <a href="https://getartcraft.com/">Storytold / ArtCraft</a>, and is not affiliated with them:
+  <a href="https://github.com/storytold/pdfcraft">github.com/storytold/pdfcraft</a> ·
+  <a href="https://getartcraft.com/apps/pdfcraft">getartcraft.com/apps/pdfcraft</a> ·
+  <a href="https://discord.gg/artcraft">discord.gg/artcraft</a></sub>
 </p>
 
 ---
@@ -606,7 +628,7 @@ This Mirai fork does not include the ArtCraft name, wordmark or logos: they are 
 ArtCraft Team, and upstream asks forks and modified versions to remove them.
 
 <p align="center">
-  <sub>Mirai fork of PdfCraft, made by the ArtCraft team and community.</sub>
+  <sub>Mirai Reader: an independent fork of <a href="https://github.com/storytold/pdfcraft">PDFCraft</a> by Storytold (ArtCraft), maintained by <a href="https://github.com/mirasins">mirasins</a>.</sub>
 </p>
 
 The Tools panel sits on the left, or on the right with Preferences ▸ Tools panel side. The rail stays at the right edge and opens one side panel beside it. Drag a panel's inner edge to resize it; widths are remembered. F4 shows or hides the side panel and Shift+F4 the Tools panel (also in the View menu); View ▸ Reset side panels restores the default arrangement.
