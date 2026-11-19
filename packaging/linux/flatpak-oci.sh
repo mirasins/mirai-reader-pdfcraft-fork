@@ -6,7 +6,7 @@
 #   packaging/linux/flatpak-oci.sh [--push] [TARBALL]
 #
 # Environment variables:
-#   REGISTRY       Target registry image (default: ghcr.io/storytold/pdfcraft)
+#   REGISTRY       Target registry image (default: ghcr.io/mirasins/mirai-reader-pdfcraft-fork)
 #   TAG            Target image tag (default: $VERSION-$ARCH, also tags stable and latest)
 #   GITHUB_TOKEN   Token for GHCR authentication when --push is used
 set -euo pipefail
@@ -50,7 +50,7 @@ if [[ "$PUSH" = 1 ]]; then
 
   AUTH_ARGS=()
   if [[ -n "${GITHUB_TOKEN:-}" ]]; then
-    AUTH_ARGS=(--dest-creds "${GITHUB_ACTOR:-storytold}:$GITHUB_TOKEN")
+    AUTH_ARGS=(--dest-creds "${GITHUB_ACTOR:-mirasins}:$GITHUB_TOKEN")
   fi
 
   echo "==> Pushing to $REGISTRY:$TAG"
