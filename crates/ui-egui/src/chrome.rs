@@ -327,7 +327,7 @@ pub fn tab_strip(app: &mut PdfCraftApp, ui: &mut egui::Ui) {
                         .on_hover_text(pdfcraft_engine::links::COMMUNITY)
                         .clicked()
                     {
-                        app.execute("help.discord");
+                        app.execute("help.community");
                     }
                 });
             });
