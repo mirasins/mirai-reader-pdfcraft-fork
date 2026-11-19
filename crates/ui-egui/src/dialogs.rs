@@ -1701,14 +1701,21 @@ fn dialog_about(ui: &mut egui::Ui, req: &mut Pending) -> bool {
             if let Some(cmd) = widgets::community_links(ui) {
                 req.link_command = Some(cmd);
             }
-            // The upstream credit's links, beside the fork's community row. No commands of their
+            // The upstream credit's links, beside the fork's community row, each labelled as the
+            // original project's so neither reads as one of the fork's own. No commands of their
             // own: the About dialog asks for the address directly.
             ui.horizontal_wrapped(|ui| {
                 ui.spacing_mut().item_spacing = egui::vec2(8.0, 8.0);
-                if widgets::ghost_button(ui, "code-xml", "PdfCraft on GitHub").on_hover_text(pdfcraft_engine::links::UPSTREAM).clicked() {
+                if widgets::ghost_button(ui, "code-xml", "PdfCraft on GitHub (original project)")
+                    .on_hover_text(pdfcraft_engine::links::UPSTREAM)
+                    .clicked()
+                {
                     req.link_url = Some(pdfcraft_engine::links::UPSTREAM);
                 }
-                if widgets::ghost_button(ui, "messages-square", "ArtCraft Discord").on_hover_text(pdfcraft_engine::links::DISCORD).clicked() {
+                if widgets::ghost_button(ui, "messages-square", "ArtCraft Discord (original project)")
+                    .on_hover_text(pdfcraft_engine::links::DISCORD)
+                    .clicked()
+                {
                     req.link_url = Some(pdfcraft_engine::links::DISCORD);
                 }
             });

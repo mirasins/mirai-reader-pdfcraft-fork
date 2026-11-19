@@ -33,7 +33,7 @@ fn home_screen_links() {
         ("Join our community", links::COMMUNITY),
         ("Report an issue", "https://github.com/mirasins/mirai-reader-pdfcraft-fork/issues"),
         ("Mirai Reader on GitHub", "https://github.com/mirasins/mirai-reader-pdfcraft-fork"),
-        ("ArtCraft website", "https://getartcraft.com"),
+        ("ArtCraft website (the original project)", "https://getartcraft.com"),
     ] {
         let mut h = harness(|_| {});
         h.get_by_label("Join the Mirai community");
@@ -83,7 +83,7 @@ fn about_dialog_upstream_credit_links_open_upstream() {
         app.open_bytes("one.pdf", None, pdf.to_vec()).unwrap();
         app.dialog = Some(Dialog::About);
     });
-    for (label, url) in [("PdfCraft on GitHub", links::UPSTREAM), ("ArtCraft Discord", links::DISCORD)] {
+    for (label, url) in [("PdfCraft on GitHub (original project)", links::UPSTREAM), ("ArtCraft Discord (original project)", links::DISCORD)] {
         h.get_by_label(label).click();
         h.run_steps(2);
         assert_eq!(h.state().last_opened_url.as_deref(), Some(url), "{label}");

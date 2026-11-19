@@ -37,7 +37,10 @@ pub const LINKS: &[Link] = &[
     Link { command: "help.discord", label: "Join the Mirai community", url: COMMUNITY, icon: "messages-square" },
     Link { command: "help.app_page", label: "Report an issue", url: ISSUES, icon: "circle-dot" },
     Link { command: "help.github", label: "PdfCraft on GitHub", url: GITHUB, icon: "code-xml" },
-    Link { command: "help.website", label: "ArtCraft website", url: WEBSITE, icon: "external-link" },
+    // The website is the original ArtCraft project's, so the label says so: it must never read
+    // as one of the fork's own pages. `help.github` is different: the rebrand layer renames
+    // "PdfCraft" to the fork's name, and it opens the fork's repository.
+    Link { command: "help.website", label: "ArtCraft website (the original project)", url: WEBSITE, icon: "external-link" },
 ];
 
 pub fn for_command(id: &str) -> Option<&'static Link> {
