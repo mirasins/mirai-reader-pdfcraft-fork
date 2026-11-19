@@ -1,5 +1,6 @@
-//! Community links: the Discord button is one click away everywhere; Help menu, About dialog and
-//! home screen open the ArtCraft and PdfCraft pages.
+//! Community links: the community button is one click away everywhere; Help menu, About dialog
+//! and home screen open the fork's community, issues and source. The About dialog also carries
+//! the upstream credit and its links, kept apart from the fork's own.
 
 use egui_kittest::Harness;
 use egui_kittest::kittest::Queryable;
@@ -18,24 +19,24 @@ fn harness(setup: impl FnOnce(&mut PdfCraftApp) + 'static) -> Harness<'static, P
 }
 
 #[test]
-fn discord_button_in_the_top_bar_opens_discord() {
+fn community_button_in_the_top_bar_opens_the_mirai_community() {
     let mut h = harness(|_| {});
-    h.get_by_label("Discord").click();
+    h.get_by_label("Community").click();
     h.run_steps(2);
-    assert_eq!(h.state().last_opened_url.as_deref(), Some(links::DISCORD));
-    assert_eq!(links::DISCORD, "https://discord.gg/artcraft");
+    assert_eq!(h.state().last_opened_url.as_deref(), Some(links::COMMUNITY));
+    assert_eq!(links::COMMUNITY, "https://github.com/mirasins");
 }
 
 #[test]
 fn home_screen_links() {
     for (label, url) in [
-        ("Join our Discord", links::DISCORD),
-        ("Mirai Reader web page", "https://getartcraft.com/apps/pdfcraft"),
+        ("Join our community", links::COMMUNITY),
+        ("Report an issue", "https://github.com/mirasins/mirai-reader-pdfcraft-fork/issues"),
         ("Mirai Reader on GitHub", "https://github.com/mirasins/mirai-reader-pdfcraft-fork"),
-        ("ArtCraft website", "https://getartcraft.com"),
+        ("ArtCraft website (the original project)", "https://getartcraft.com"),
     ] {
         let mut h = harness(|_| {});
-        h.get_by_label("Join the ArtCraft community");
+        h.get_by_label("Join the Mirai community");
         h.get_by_label(label).click();
         h.run_steps(2);
         assert_eq!(h.state().last_opened_url.as_deref(), Some(url), "{label}");
@@ -45,12 +46,12 @@ fn home_screen_links() {
 #[test]
 fn home_community_card_closes_for_this_run() {
     let mut h = harness(|_| {});
-    h.get_by_label("Join the ArtCraft community");
+    h.get_by_label("Join the Mirai community");
     h.get_by_label("Close").click();
     h.run_steps(2);
     assert!(h.state().community_card_closed);
-    assert!(h.query_by_label("Join the ArtCraft community").is_none());
-    assert!(h.query_by_label("Join our Discord").is_none());
+    assert!(h.query_by_label("Join the Mirai community").is_none());
+    assert!(h.query_by_label("Join our community").is_none());
     // Not remembered: a fresh app shows the card again.
     assert!(!PdfCraftApp::new().community_card_closed);
 }
@@ -63,11 +64,30 @@ fn about_dialog_shows_the_brand_and_links() {
         app.open_bytes("one.pdf", None, pdf.to_vec()).unwrap();
         app.dialog = Some(Dialog::About);
     });
-    // Mirai fork: no ArtCraft brand files; the mark is the app icon and the wordmark says Mirai.
-    assert!(h.query_all_by_label("Mirai").count() >= 2, "the mark and the wordmark (alt text)");
-    h.get_by_label("Join our Discord").click();
+    // Mirai fork: no ArtCraft brand files; the mark is the app icon and the name says Mirai Reader.
+    h.get_by_label("Mirai Reader");
+    assert!(h.query_all_by_label("Mirai").count() >= 1, "the mark's alt text");
+    // The upstream credit shows as it stands: the rebrand layer must not rename the original
+    // project in it (`brand::rebrand` renames every string the fork translates).
+    h.get_by_label(pdfcraft_ui_egui::brand::UPSTREAM_CREDIT);
+    h.get_by_label(pdfcraft_ui_egui::brand::FORK_NOTICE);
+    h.get_by_label("Join our community").click();
     h.run_steps(2);
-    assert_eq!(h.state().last_opened_url.as_deref(), Some(links::DISCORD));
+    assert_eq!(h.state().last_opened_url.as_deref(), Some(links::COMMUNITY));
+}
+
+#[test]
+fn about_dialog_upstream_credit_links_open_upstream() {
+    let pdf = b"%PDF-1.7\n1 0 obj << /Type /Catalog /Pages 2 0 R >> endobj\n2 0 obj << /Type /Pages /Kids [3 0 R] /Count 1 >> endobj\n3 0 obj << /Type /Page /Parent 2 0 R /MediaBox [0 0 200 200] >> endobj\ntrailer << /Root 1 0 R >>\n%%EOF";
+    let mut h = harness(move |app| {
+        app.open_bytes("one.pdf", None, pdf.to_vec()).unwrap();
+        app.dialog = Some(Dialog::About);
+    });
+    for (label, url) in [("PdfCraft on GitHub (original project)", links::UPSTREAM), ("ArtCraft Discord (original project)", links::DISCORD)] {
+        h.get_by_label(label).click();
+        h.run_steps(2);
+        assert_eq!(h.state().last_opened_url.as_deref(), Some(url), "{label}");
+    }
 }
 
 #[test]

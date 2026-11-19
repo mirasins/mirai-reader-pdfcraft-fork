@@ -1,5 +1,5 @@
-//! Where PdfCraft and the ArtCraft community live on the web. One table, so the Help menu, the
-//! About dialog, the home screen, the CLI and the README agree.
+//! Where Mirai Reader's community, and the upstream project it is based on, live on the web.
+//! One table, so the Help menu, the About dialog, the home screen, the CLI and the README agree.
 
 use icu_properties::props::Script;
 use std::path::{Path, PathBuf};
@@ -7,10 +7,19 @@ use std::path::{Path, PathBuf};
 /// The app's name in ArtCraft URLs (`getartcraft.com/apps/{APP}`, `github.com/storytold/{APP}`).
 pub const APP: &str = "pdfcraft";
 
+/// The Mirai fork's community and support: the owner's GitHub home.
+pub const COMMUNITY: &str = "https://github.com/mirasins";
+/// Where the fork's issues are filed.
+pub const ISSUES: &str = "https://github.com/mirasins/mirai-reader-pdfcraft-fork/issues";
+pub const GITHUB: &str = "https://github.com/mirasins/mirai-reader-pdfcraft-fork";
+
+/// The original project this fork is based on. A credit, not the fork's community: the About
+/// dialog links to it beside the fork notice, and it never takes the fork's place.
+pub const UPSTREAM: &str = "https://github.com/storytold/pdfcraft";
+/// ArtCraft's Discord. The fork has none of its own; community and support are [`COMMUNITY`].
 pub const DISCORD: &str = "https://discord.gg/artcraft";
 pub const WEBSITE: &str = "https://getartcraft.com";
 pub const APP_PAGE: &str = "https://getartcraft.com/apps/pdfcraft";
-pub const GITHUB: &str = "https://github.com/mirasins/mirai-reader-pdfcraft-fork";
 
 /// A link and the registry command that opens it.
 #[derive(Clone, Copy, Debug)]
@@ -22,12 +31,16 @@ pub struct Link {
     pub icon: &'static str,
 }
 
-/// In the order they are shown. Discord comes first: it is where people get help fastest.
+/// In the order they are shown. The Mirai community comes first: it is where people get help
+/// fastest. The last entry is the upstream suite's site, kept as a plainly-named credit.
 pub const LINKS: &[Link] = &[
-    Link { command: "help.discord", label: "Join the ArtCraft Discord", url: DISCORD, icon: "messages-square" },
-    Link { command: "help.app_page", label: "PdfCraft web page", url: APP_PAGE, icon: "globe" },
+    Link { command: "help.discord", label: "Join the Mirai community", url: COMMUNITY, icon: "messages-square" },
+    Link { command: "help.app_page", label: "Report an issue", url: ISSUES, icon: "circle-dot" },
     Link { command: "help.github", label: "PdfCraft on GitHub", url: GITHUB, icon: "code-xml" },
-    Link { command: "help.website", label: "ArtCraft website", url: WEBSITE, icon: "external-link" },
+    // The website is the original ArtCraft project's, so the label says so: it must never read
+    // as one of the fork's own pages. `help.github` is different: the rebrand layer renames
+    // "PdfCraft" to the fork's name, and it opens the fork's repository.
+    Link { command: "help.website", label: "ArtCraft website (the original project)", url: WEBSITE, icon: "external-link" },
 ];
 
 pub fn for_command(id: &str) -> Option<&'static Link> {

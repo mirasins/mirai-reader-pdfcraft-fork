@@ -9,13 +9,21 @@
 // The settings object in `persist` is one `json!` literal past the default limit of 128.
 #![recursion_limit = "256"]
 
-/// PdfCraft as craft-update knows it, with its 128 px icon and accent colour: the update
-/// prompt shows both, and an AppImage's menu entry gets the icon.
+/// PdfCraft as the Mirai fork's releases know it, with its 128 px icon and accent colour: the
+/// update prompt shows both, and an AppImage's menu entry gets the icon.
 #[cfg(not(target_arch = "wasm32"))]
 pub const UPDATE_APP: craft_update::app::App = craft_update::app::App {
     // The Mirai fork's releases: updates are only ever downloaded from the fork's own
     // repository, never from upstream.
     repo: "mirasins/mirai-reader-pdfcraft-fork",
+    // What the update prompt's header shows: the fork's own name and maintainer, so the card
+    // never reads "PdfCraft by ArtCraft" and presents this app as the original project's. The
+    // registered display names stay covered: `name` is what this fork's MSI writes
+    // ("Mirai Reader"), and `former_names` keeps installs made before the rename ("PdfCraft")
+    // and PdfCraft's own former name ("PrintCraft") findable.
+    name: "Mirai Reader",
+    developer: "mirasins",
+    former_names: &["PdfCraft", "PrintCraft"],
     icon_png: Some(include_bytes!("../../../assets/app-icon/hicolor/128x128/apps/ai.storyteller.pdfcraft.png")),
     accent: Some([0xb7, 0x02, 0x28]),
     ..craft_update::suite::PDFCRAFT

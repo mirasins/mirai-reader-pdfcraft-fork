@@ -55,6 +55,9 @@ struct Pending {
     number_now: Option<Edit>,
     apply_number: bool,
     link_command: Option<&'static str>,
+    /// A web address a dialog widget asked to open directly (the About dialog's upstream credit
+    /// links, which have no command of their own). Opened after the modal is drawn.
+    link_url: Option<&'static str>,
     protect_now: bool,
     boxes_now: bool,
     printer_marks_now: bool,
@@ -1688,15 +1691,34 @@ fn dialog_about(ui: &mut egui::Ui, req: &mut Pending) -> bool {
                 .color(t.text_muted)
                 .small(),
             );
-            ui.add_space(12.0);
-            ui.horizontal(|ui| {
-                ui.label(egui::RichText::new(tl!("Part of")).color(t.text_muted));
-                widgets::artcraft_logo(ui, 16.0);
-            });
             ui.add_space(6.0);
+            // The upstream credit, clearly apart from the fork's own name and links above. Drawn
+            // as it stands, never through `tl!`: `brand::rebrand` renames the fork's interface
+            // strings, and the credit must keep the original project's names (a test pins it).
+            ui.label(egui::RichText::new(crate::brand::UPSTREAM_CREDIT).color(t.text_muted));
+            ui.label(egui::RichText::new(crate::brand::FORK_NOTICE).color(t.text_muted).small());
+            ui.add_space(12.0);
             if let Some(cmd) = widgets::community_links(ui) {
                 req.link_command = Some(cmd);
             }
+            // The upstream credit's links, beside the fork's community row, each labelled as the
+            // original project's so neither reads as one of the fork's own. No commands of their
+            // own: the About dialog asks for the address directly.
+            ui.horizontal_wrapped(|ui| {
+                ui.spacing_mut().item_spacing = egui::vec2(8.0, 8.0);
+                if widgets::ghost_button(ui, "code-xml", "PdfCraft on GitHub (original project)")
+                    .on_hover_text(pdfcraft_engine::links::UPSTREAM)
+                    .clicked()
+                {
+                    req.link_url = Some(pdfcraft_engine::links::UPSTREAM);
+                }
+                if widgets::ghost_button(ui, "messages-square", "ArtCraft Discord (original project)")
+                    .on_hover_text(pdfcraft_engine::links::DISCORD)
+                    .clicked()
+                {
+                    req.link_url = Some(pdfcraft_engine::links::DISCORD);
+                }
+            });
         }
     }
     true
@@ -2224,6 +2246,9 @@ fn finish_close(app: &mut PdfCraftApp, dialog: Dialog, modal_closed: bool, req: 
     discard_inactive_password_drafts(app);
     if let Some(cmd) = req.link_command {
         app.execute(cmd);
+    }
+    if let Some(url) = req.link_url {
+        app.open_url(url);
     }
     if let Some(n) = req.open_revision {
         app.open_revision(n);

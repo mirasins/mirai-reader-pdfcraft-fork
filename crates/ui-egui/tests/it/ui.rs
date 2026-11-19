@@ -695,8 +695,8 @@ fn tabs_shrink_to_fit_then_arrows_step_through_them_and_open_stays_in_sight() {
         }
     });
     let open = h.get_by_label("Open").rect();
-    let discord = h.get_by_label("Discord").rect();
-    assert!(open.right() <= discord.left(), "Open {open:?} must not run under Discord {discord:?}");
+    let community = h.get_by_label("Community").rect();
+    assert!(open.right() <= community.left(), "Open {open:?} must not run under Community {community:?}");
     let mut previous_right = f32::MIN;
     for i in 0..5 {
         let tab = h.get_by_label(&name(i)).rect();
@@ -720,15 +720,15 @@ fn tabs_shrink_to_fit_then_arrows_step_through_them_and_open_stays_in_sight() {
     assert_eq!(enabled(&h, "Scroll tabs right"), Some(true), "and then there is more to the right");
     let open = h.get_by_label("Open").rect();
     let right = h.get_by_label("Scroll tabs right").rect();
-    assert!(right.right() <= open.left() + 0.5 && open.right() <= h.get_by_label("Discord").rect().left());
-    // Twenty: Open stays in sight left of Discord.
+    assert!(right.right() <= open.left() + 0.5 && open.right() <= h.get_by_label("Community").rect().left());
+    // Twenty: Open stays in sight left of Community.
     for i in 0..13 {
         h.state_mut().open_bytes(&format!("more-{i:02}.pdf"), None, FIXTURE.to_vec()).unwrap();
     }
     h.run_steps(4);
     let open = h.get_by_label("Open").rect();
-    let discord = h.get_by_label("Discord").rect();
-    assert!(open.left() > 0.0 && open.right() <= discord.left(), "Open {open:?} stays in sight left of Discord {discord:?}");
+    let community = h.get_by_label("Community").rect();
+    assert!(open.left() > 0.0 && open.right() <= community.left(), "Open {open:?} stays in sight left of Community {community:?}");
 }
 
 /// macOS (#789): with the integrated title bar, the strip is the 28 pt band AppKit centres the
@@ -741,7 +741,7 @@ fn the_integrated_title_bar_is_the_traffic_light_band() {
         app.open_bytes("band.pdf", None, FIXTURE.to_vec()).unwrap();
     });
     let band = 28.0;
-    for label in ["Home", "band.pdf", "Open", "Discord", "Keyboard shortcuts"] {
+    for label in ["Home", "band.pdf", "Open", "Community", "Keyboard shortcuts"] {
         let r = h.get_by_label(label).rect();
         assert!(r.top() >= 0.0 && r.bottom() <= band, "{label}: {r:?} inside the {band} pt title bar");
         assert!(r.height() >= 24.0, "{label}: {r:?} stays clickable");
@@ -753,8 +753,8 @@ fn the_integrated_title_bar_is_the_traffic_light_band() {
 
 /// macOS with a right-to-left system language: AppKit mirrors the traffic lights to the right end
 /// of the title bar, and the strip mirrors with them. Home sits beside the lights, the tabs read
-/// from the right after it, then Open; Discord, shortcuts, theme and Preferences move to the far
-/// left end.
+/// from the right after it, then Open; the community button, shortcuts, theme and Preferences
+/// move to the far left end.
 #[cfg(target_os = "macos")]
 fn mirrored_title_bar(names: &[&'static str]) -> Harness<'static, PdfCraftApp> {
     let names = names.to_vec();
@@ -778,7 +778,7 @@ fn the_integrated_title_bar_mirrors_with_traffic_lights_at_the_right() {
         ("Home", rect("Home")),
         ("first.pdf", rect("first.pdf")),
         ("Open", rect("Open")),
-        ("Discord", rect("Discord")),
+        ("Community", rect("Community")),
         ("Display theme", theme),
         ("Preferences", rect("Preferences")),
     ] {
@@ -793,14 +793,14 @@ fn the_integrated_title_bar_mirrors_with_traffic_lights_at_the_right() {
     assert!(rect("last.pdf").right() <= rect("first.pdf").left(), "the tabs read from the right");
     assert!(rect("first.pdf").right() >= home.left() - 12.0, "the tabs stay beside Home");
     assert!(rect("Open").right() <= rect("last.pdf").left(), "Open follows the tabs");
-    // The other end: Preferences, theme, shortcuts and Discord, mirroring their order at the right.
-    let (preferences, help, discord) = (rect("Preferences"), rect("Keyboard shortcuts"), rect("Discord"));
+    // The other end: Preferences, theme, shortcuts and the community button, mirroring their order at the right.
+    let (preferences, help, community) = (rect("Preferences"), rect("Keyboard shortcuts"), rect("Community"));
     assert!(preferences.left() < 20.0, "Preferences {preferences:?} at the far end");
     assert!(
-        preferences.right() <= theme.left() && theme.right() <= help.left() && help.right() <= discord.left(),
-        "Preferences, theme, shortcuts, Discord"
+        preferences.right() <= theme.left() && theme.right() <= help.left() && help.right() <= community.left(),
+        "Preferences, theme, shortcuts, community"
     );
-    assert!(discord.right() < rect("Open").left(), "Discord stays clear of Open");
+    assert!(community.right() < rect("Open").left(), "the community button stays clear of Open");
 }
 
 /// Mirrored, a tab dragged to the left moves later in the order, as it reads from the right.
