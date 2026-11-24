@@ -27,7 +27,7 @@ pub struct Link {
     pub command: &'static str,
     pub label: &'static str,
     pub url: &'static str,
-    /// Lucide icon name.
+    /// Icon name: a name of the UI catalogue, or one of the app's own set.
     pub icon: &'static str,
 }
 
@@ -40,7 +40,7 @@ pub const LINKS: &[Link] = &[
     // The website is the original ArtCraft project's, so the label says so: it must never read
     // as one of the fork's own pages. `help.github` is different: the rebrand layer renames
     // "PdfCraft" to the fork's name, and it opens the fork's repository.
-    Link { command: "help.website", label: "ArtCraft website (the original project)", url: WEBSITE, icon: "external-link" },
+    Link { command: "help.website", label: "ArtCraft website (the original project)", url: WEBSITE, icon: "open" },
 ];
 
 pub fn for_command(id: &str) -> Option<&'static Link> {

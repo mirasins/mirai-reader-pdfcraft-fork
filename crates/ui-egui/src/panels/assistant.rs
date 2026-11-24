@@ -14,8 +14,7 @@ use pdfcraft_ai::{Request, Status, Task};
 use pdfcraft_engine::DocId;
 use pdfcraft_engine::export::{ExportSource, Exporter};
 
-use super::{LeftPanel, PdfCraftApp, Tokens, ToolGroup, icons, widgets};
-use crate::theme::ThemeKind;
+use super::{PdfCraftApp, ToolGroup};
 
 /// "All pages" is refused above this many pages rather than silently reading a subset.
 const MAX_PAGES: usize = 500;
@@ -172,22 +171,14 @@ fn fill_question(st: &mut AssistantState, text: &str) {
     st.focus_question = true;
 }
 
-pub(super) fn assistant_panel(app: &mut PdfCraftApp, ui: &mut egui::Ui, t: &Tokens, g: &'static ToolGroup) {
-    let (back, close) = super::panel_header(ui, t, g.label, Some(("chevron-left", tl!("Back to all tools"))));
-    if back {
-        app.left = LeftPanel::AllTools;
-        app.enter_mode(crate::Mode::AllTools);
-    }
-    if close {
-        app.left_open = false;
-    }
+pub(super) fn assistant_panel(app: &mut PdfCraftApp, ui: &mut egui::Ui, _g: &'static ToolGroup) {
     // The state is taken out so the panel can use `app` freely, and put back at the end.
     let mut st = std::mem::take(&mut app.assistant);
     if st.language.is_empty() {
         st.language = crate::i18n::current().english_name().to_owned();
     }
     poll(&mut st, ui.ctx());
-    let go = draw(app, &mut st, ui, t);
+    let go = draw(app, &mut st, ui);
     app.assistant = st;
     if let Some(page) = go
         && let Some(view) = app.active.and_then(|i| app.views.get_mut(i))
@@ -244,7 +235,7 @@ fn start_status_check(st: &mut AssistantState, ctx: &egui::Context) {
 }
 
 /// Draw the panel body. Returns a 0-based page to go to when a citation was clicked.
-fn draw(app: &mut PdfCraftApp, st: &mut AssistantState, ui: &mut egui::Ui, t: &Tokens) -> Option<usize> {
+fn draw(app: &mut PdfCraftApp, st: &mut AssistantState, ui: &mut egui::Ui) -> Option<usize> {
     let mut go = None;
     let mut send = false;
     let mut cancel = false;
@@ -257,26 +248,25 @@ fn draw(app: &mut PdfCraftApp, st: &mut AssistantState, ui: &mut egui::Ui, t: &T
     let doc = app.active_ids();
     let running = st.run.is_some();
     egui::ScrollArea::vertical().auto_shrink([false, false]).stick_to_bottom(true).show(ui, |ui| {
-        super::tools::clear_of_scrollbar(ui);
-        status_card(app, st, ui, t);
+        status_card(app, st, ui);
         ui.add_space(6.0);
         ui.label(
             egui::RichText::new(tl!(
                 "Only the pages you choose are sent to Claude through your Claude Code sign-in. Nothing is sent until you press a button."
             ))
             .size(12.0)
-            .color(t.text_muted),
+            .color(ui.visuals().weak_text_color()),
         );
         ui.add_space(8.0);
 
-        widgets::section_title(ui, tl!("Pages to read"));
-        widgets::radio_value(ui, &mut st.scope, Scope::Current, tl!("Current page"));
-        widgets::radio_value(ui, &mut st.scope, Scope::All, tl!("All pages (up to 500)"));
+        super::tools::caption_row(ui, tl!("Pages to read"), true);
+        ui.radio_value(&mut st.scope, Scope::Current, tl!("Current page"));
+        ui.radio_value(&mut st.scope, Scope::All, tl!("All pages (up to 500)"));
         ui.add_space(8.0);
 
         let usable = ready && doc.is_some() && !running;
         if doc.is_none() {
-            ui.label(egui::RichText::new(tl!("Open a PDF to use the assistant.")).size(12.0).color(t.text_muted));
+            ui.label(egui::RichText::new(tl!("Open a PDF to use the assistant.")).size(12.0).color(ui.visuals().weak_text_color()));
         }
         let shown: Vec<usize> = match doc {
             Some((_, id)) => st.history.iter().enumerate().filter(|(_, a)| a.doc == id).map(|(i, _)| i).collect(),
@@ -293,7 +283,7 @@ fn draw(app: &mut PdfCraftApp, st: &mut AssistantState, ui: &mut egui::Ui, t: &T
             match st.mode {
                 Mode::Ask => {
                     let field = ui.add(
-                        widgets::block(&mut st.question)
+                        egui::TextEdit::multiline(&mut st.question)
                             .id_salt("mirai_assistant_question")
                             .desired_rows(3)
                             .desired_width(f32::INFINITY)
@@ -309,14 +299,14 @@ fn draw(app: &mut PdfCraftApp, st: &mut AssistantState, ui: &mut egui::Ui, t: &T
                     }
                 }
                 Mode::Translate => {
-                    ui.add(widgets::line(&mut st.language).desired_width(f32::INFINITY).hint_text(tl!("Target language")));
+                    ui.add(egui::TextEdit::singleline(&mut st.language).desired_width(f32::INFINITY).hint_text(tl!("Target language")));
                 }
                 Mode::Summarize | Mode::Explain => {}
             }
             ui.add_space(4.0);
             let can_send = st.mode != Mode::Ask || !st.question.trim().is_empty();
             ui.add_enabled_ui(can_send, |ui| {
-                if widgets::pill_button(ui, tl!("Send"), true).clicked() {
+                if ui.button(tl!("Send")).clicked() {
                     send = true;
                 }
             });
@@ -340,8 +330,8 @@ fn draw(app: &mut PdfCraftApp, st: &mut AssistantState, ui: &mut egui::Ui, t: &T
                 ui.label(crate::i18n::fmt(tl!("{name} is working… {time}"), &[("name", pdfcraft_ai::ASSISTANT_NAME), ("time", &time)]));
             });
             let n = run.pages.to_string();
-            ui.label(egui::RichText::new(crate::i18n::fmt(tl!("Reading {n} pages"), &[("n", &n)])).size(12.0).color(t.text_muted));
-            if widgets::pill_button(ui, tl!("Cancel"), false).clicked() {
+            ui.label(egui::RichText::new(crate::i18n::fmt(tl!("Reading {n} pages"), &[("n", &n)])).size(12.0).color(ui.visuals().weak_text_color()));
+            if ui.button(tl!("Cancel")).clicked() {
                 cancel = true;
             }
             ui.add_space(8.0);
@@ -352,16 +342,16 @@ fn draw(app: &mut PdfCraftApp, st: &mut AssistantState, ui: &mut egui::Ui, t: &T
             ui.push_id(i, |ui| {
                 ui.add_space(4.0);
                 let you = crate::i18n::fmt(tl!("You: {text}"), &[("text", &answer.heading)]);
-                ui.label(egui::RichText::new(you).size(12.0).color(t.text_muted));
+                ui.label(egui::RichText::new(you).size(12.0).color(ui.visuals().weak_text_color()));
                 ui.add_space(2.0);
                 match &answer.body {
                     Ok(text) => {
-                        if let Some(page) = answer_text(ui, t, text, &answer.cites) {
+                        if let Some(page) = answer_text(ui, text, &answer.cites) {
                             go = Some(page);
                         }
                         ui.add_space(4.0);
                         ui.horizontal(|ui| {
-                            if widgets::pill_button(ui, tl!("Copy"), false).clicked() {
+                            if ui.button(tl!("Copy")).clicked() {
                                 copy = Some(text.clone());
                             }
                             if ui.small_button(tl!("Remove")).clicked() {
@@ -370,7 +360,7 @@ fn draw(app: &mut PdfCraftApp, st: &mut AssistantState, ui: &mut egui::Ui, t: &T
                         });
                     }
                     Err(message) => {
-                        let color = if matches!(t.kind, ThemeKind::Dark) {
+                        let color = if ui.visuals().dark_mode {
                             egui::Color32::from_rgb(0xFF, 0x8A, 0x80)
                         } else {
                             egui::Color32::from_rgb(0xB0, 0x1E, 0x1E)
@@ -424,59 +414,62 @@ fn dot(ui: &mut egui::Ui, color: egui::Color32) {
     ui.painter().circle_filled(rect.center(), 4.0, color);
 }
 
-fn status_card(app: &mut PdfCraftApp, st: &mut AssistantState, ui: &mut egui::Ui, t: &Tokens) {
+fn status_card(app: &mut PdfCraftApp, st: &mut AssistantState, ui: &mut egui::Ui) {
     let mut check = false;
     let mut install = false;
     let green = egui::Color32::from_rgb(0x2E, 0xA0, 0x43);
     let amber = egui::Color32::from_rgb(0xD9, 0x9A, 0x1E);
     let red = egui::Color32::from_rgb(0xD6, 0x45, 0x45);
-    egui::Frame::NONE.fill(t.card).corner_radius(egui::CornerRadius::same(8)).inner_margin(egui::Margin::same(10)).show(ui, |ui| {
-        ui.set_width(ui.available_width());
-        match &st.status {
-            StatusSlot::Unchecked => {
-                ui.horizontal(|ui| {
-                    dot(ui, t.text_muted);
-                    ui.label(tl!("Not checked yet"));
-                });
-            }
-            StatusSlot::Checking(_) => {
-                ui.horizontal(|ui| {
-                    ui.add(egui::Spinner::new());
-                    ui.label(tl!("Checking Claude Code…"));
-                });
-            }
-            StatusSlot::Known(Status::Ready { plan }) => {
-                ui.horizontal(|ui| {
-                    dot(ui, green);
-                    ui.label(tl!("Connected with your Claude account"));
-                });
-                if let Some(plan) = plan.as_deref().filter(|p| !p.trim().is_empty()) {
-                    ui.label(egui::RichText::new(plan).size(12.0).color(t.text_muted));
+    egui::Frame::NONE.fill(ui.visuals().faint_bg_color).corner_radius(egui::CornerRadius::same(8)).inner_margin(egui::Margin::same(10)).show(
+        ui,
+        |ui| {
+            ui.set_width(ui.available_width());
+            match &st.status {
+                StatusSlot::Unchecked => {
+                    ui.horizontal(|ui| {
+                        let color = ui.visuals().weak_text_color();
+                        dot(ui, color);
+                        ui.label(tl!("Not checked yet"));
+                    });
+                }
+                StatusSlot::Checking(_) => {
+                    ui.horizontal(|ui| {
+                        ui.add(egui::Spinner::new());
+                        ui.label(tl!("Checking Claude Code…"));
+                    });
+                }
+                StatusSlot::Known(Status::Ready { plan }) => {
+                    ui.horizontal(|ui| {
+                        dot(ui, green);
+                        ui.label(tl!("Connected with your Claude account"));
+                    });
+                    if let Some(plan) = plan.as_deref().filter(|p| !p.trim().is_empty()) {
+                        ui.label(egui::RichText::new(plan).size(12.0).color(ui.visuals().weak_text_color()));
+                    }
+                }
+                StatusSlot::Known(other) => {
+                    let color = if matches!(other, Status::Unavailable { .. }) { amber } else { red };
+                    ui.horizontal_top(|ui| {
+                        dot(ui, color);
+                        ui.label(other.advice());
+                    });
+                    if matches!(other, Status::NotInstalled) {
+                        ui.add_space(4.0);
+                        install = ui.button(tl!("Get Claude Code")).clicked();
+                    }
                 }
             }
-            StatusSlot::Known(other) => {
-                let color = if matches!(other, Status::Unavailable { .. }) { amber } else { red };
-                ui.horizontal_top(|ui| {
-                    dot(ui, color);
-                    ui.label(other.advice());
+            if !matches!(st.status, StatusSlot::Checking(_)) {
+                ui.add_space(4.0);
+                let label = if matches!(st.status, StatusSlot::Unchecked) { tl!("Check connection") } else { tl!("Check again") };
+                ui.horizontal(|ui| {
+                    if ui.button(label).clicked() {
+                        check = true;
+                    }
                 });
-                if matches!(other, Status::NotInstalled) {
-                    ui.add_space(4.0);
-                    install = widgets::pill_button(ui, tl!("Get Claude Code"), true).clicked();
-                }
             }
-        }
-        if !matches!(st.status, StatusSlot::Checking(_)) {
-            ui.add_space(4.0);
-            let label = if matches!(st.status, StatusSlot::Unchecked) { tl!("Check connection") } else { tl!("Check again") };
-            ui.horizontal(|ui| {
-                if icons::button(ui, "rotate-cw", 24.0, false, label).clicked() {
-                    check = true;
-                }
-                ui.label(egui::RichText::new(label).size(12.0).color(t.text_muted));
-            });
-        }
-    });
+        },
+    );
     if install {
         app.open_url(pdfcraft_ai::INSTALL_URL);
     }
@@ -538,7 +531,7 @@ fn collect_pages(
 fn start_run(app: &mut PdfCraftApp, st: &mut AssistantState, ctx: &egui::Context, view: usize, id: DocId, mode: Mode) {
     let Some(doc) = app.session.get(id) else { return };
     let title = Some(doc.display_name()).filter(|n| !n.trim().is_empty());
-    let current = app.views.get(view).map_or(0, |v| v.current);
+    let current = app.views.get(view).map_or(0, |v| v.current());
     let (task, heading) = match mode {
         Mode::Summarize => (Task::Summarize, tl!("Summary").to_owned()),
         Mode::Explain => (Task::Explain, tl!("Explanation").to_owned()),
@@ -593,7 +586,7 @@ fn start_run(app: &mut PdfCraftApp, st: &mut AssistantState, ctx: &egui::Context
 
 /// Draw the answer as selectable text with its `[p. N]` citations as links. Returns the 0-based
 /// page of a clicked citation.
-fn answer_text(ui: &mut egui::Ui, t: &Tokens, text: &str, cites: &[(std::ops::Range<usize>, u32)]) -> Option<usize> {
+fn answer_text(ui: &mut egui::Ui, text: &str, cites: &[(std::ops::Range<usize>, u32)]) -> Option<usize> {
     let mut go = None;
     let mut offset = 0usize;
     // Citations are sorted and never overlap, so one cursor walks them across all the lines.
@@ -614,7 +607,7 @@ fn answer_text(ui: &mut egui::Ui, t: &Tokens, text: &str, cites: &[(std::ops::Ra
                 while let Some((range, page)) = cites.get(next).filter(|(r, _)| r.end <= end) {
                     next += 1;
                     if let Some(before) = text.get(at..range.start) {
-                        ui.label(egui::RichText::new(before).color(t.text));
+                        ui.label(egui::RichText::new(before).color(ui.visuals().text_color()));
                     }
                     let shown = text.get(range.clone()).unwrap_or("[p.]");
                     if ui.link(shown).on_hover_text(tl!("Go to this page")).clicked() {
@@ -623,7 +616,7 @@ fn answer_text(ui: &mut egui::Ui, t: &Tokens, text: &str, cites: &[(std::ops::Ra
                     at = range.end;
                 }
                 if let Some(rest) = text.get(at..end) {
-                    ui.label(egui::RichText::new(rest).color(t.text));
+                    ui.label(egui::RichText::new(rest).color(ui.visuals().text_color()));
                 }
             });
         }

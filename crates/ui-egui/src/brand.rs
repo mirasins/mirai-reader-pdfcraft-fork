@@ -13,6 +13,9 @@ use std::sync::{Mutex, OnceLock};
 /// The name the fork shows for the app.
 pub const APP_NAME: &str = "Mirai Reader";
 
+/// The fork's icon, also used for compact UI marks.
+pub(crate) const MARK: &[u8] = include_bytes!("../../../assets/app-icon/pdfcraft-small.svg");
+
 /// The upstream credit, shown in the About dialog and the README: the original project, by name.
 /// Drawn as it stands, never through [`crate::i18n::tr`]: [`rebrand`] renames the fork's own
 /// interface strings, and this must keep the original project's name (a test pins it).
@@ -85,4 +88,12 @@ mod tests {
         assert!(!UPSTREAM_CREDIT.contains(APP_NAME));
         assert!(!FORK_NOTICE.contains(APP_NAME));
     }
+}
+
+/// The Mirai Reader mark at `size`.
+pub(crate) fn mark(ui: &mut egui::Ui, size: craft::ui::display::PictureSize) {
+    use craft::ui::contract::Show as _;
+    use craft::ui::display::Picture;
+
+    let _ = Picture::svg(APP_NAME.to_string(), MARK).extent(size).show(ui);
 }
