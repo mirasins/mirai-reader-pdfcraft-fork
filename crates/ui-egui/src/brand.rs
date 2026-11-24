@@ -53,6 +53,14 @@ pub fn rebrand(s: &str) -> &str {
     branded
 }
 
+/// The Mirai Reader mark at `size`.
+pub(crate) fn mark(ui: &mut egui::Ui, size: craft::ui::display::PictureSize) {
+    use craft::ui::contract::Show as _;
+    use craft::ui::display::Picture;
+
+    let _ = Picture::svg(APP_NAME.to_string(), MARK).extent(size).show(ui);
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -88,12 +96,4 @@ mod tests {
         assert!(!UPSTREAM_CREDIT.contains(APP_NAME));
         assert!(!FORK_NOTICE.contains(APP_NAME));
     }
-}
-
-/// The Mirai Reader mark at `size`.
-pub(crate) fn mark(ui: &mut egui::Ui, size: craft::ui::display::PictureSize) {
-    use craft::ui::contract::Show as _;
-    use craft::ui::display::Picture;
-
-    let _ = Picture::svg(APP_NAME.to_string(), MARK).extent(size).show(ui);
 }

@@ -35,7 +35,7 @@ pub struct Link {
 /// fastest. The last entry is the upstream suite's site, kept as a plainly-named credit.
 pub const LINKS: &[Link] = &[
     Link { command: "help.community", label: "Join the Mirai community", url: COMMUNITY, icon: "messages-square" },
-    Link { command: "help.issues", label: "Report an issue", url: ISSUES, icon: "circle-dot" },
+    Link { command: "help.issues", label: "Report an issue", url: ISSUES, icon: "triangle-alert" },
     Link { command: "help.github", label: "PdfCraft on GitHub", url: GITHUB, icon: "code-xml" },
     // The website is the original ArtCraft project's, so the label says so: it must never read
     // as one of the fork's own pages. `help.github` is different: the rebrand layer renames

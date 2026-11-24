@@ -451,7 +451,7 @@ pub const COMMANDS: &[CommandSpec] = &[
     c("page.properties", "Page properties…", PAGES, None, Modification, "info"),
     c("help.shortcuts", "Keyboard shortcuts", HELP, None, Nothing, "circle-help"),
     c("help.community", "Join the Mirai community", HELP, None, Nothing, "messages-square"),
-    c("help.issues", "Report an issue", HELP, None, Nothing, "circle-dot"),
+    c("help.issues", "Report an issue", HELP, None, Nothing, "triangle-alert"),
     c("help.github", "PdfCraft on GitHub", HELP, None, Nothing, "code-xml"),
     c("help.website", "ArtCraft website (the original project)", HELP, None, Nothing, "open"),
     c("help.check_updates", "Check for updates…", HELP, None, Nothing, "cloud"),

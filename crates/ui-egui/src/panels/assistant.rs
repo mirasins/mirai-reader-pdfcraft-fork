@@ -10,6 +10,8 @@ use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::mpsc::{Receiver, TryRecvError, channel};
 
+use craft::ui::choice::{Radio, RadioGroup};
+use craft::ui::contract::{Bind, Props as _, Show as _, ShowContainer as _};
 use pdfcraft_ai::{Request, Status, Task};
 use pdfcraft_engine::DocId;
 use pdfcraft_engine::export::{ExportSource, Exporter};
@@ -260,8 +262,10 @@ fn draw(app: &mut PdfCraftApp, st: &mut AssistantState, ui: &mut egui::Ui) -> Op
         ui.add_space(8.0);
 
         super::tools::caption_row(ui, tl!("Pages to read"), true);
-        ui.radio_value(&mut st.scope, Scope::Current, tl!("Current page"));
-        ui.radio_value(&mut st.scope, Scope::All, tl!("All pages (up to 500)"));
+        RadioGroup::new(tl!("Pages to read"), Bind::bound(&mut st.scope)).show(ui, |ui, _| {
+            Radio::new(Scope::Current).label(tl!("Current page")).show(ui);
+            Radio::new(Scope::All).label(tl!("All pages (up to 500)")).show(ui);
+        });
         ui.add_space(8.0);
 
         let usable = ready && doc.is_some() && !running;
