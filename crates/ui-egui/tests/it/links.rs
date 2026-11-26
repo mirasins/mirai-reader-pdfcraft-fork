@@ -61,7 +61,10 @@ fn about_dialog_shows_the_brand_and_links() {
     assert!(h.query_all_by_label("Mirai").count() >= 1, "the mark's alt text");
     h.get_by_label(pdfcraft_ui_egui::brand::UPSTREAM_CREDIT);
     h.get_by_label(pdfcraft_ui_egui::brand::FORK_NOTICE);
-    settled(&mut h, "Join our community").click();
+    use egui_kittest::kittest::NodeT as _;
+    // The Home page's community card, behind the dialog, has the same name and is hidden: press the dialog's.
+    settled(&mut h, "Join our community");
+    h.query_all_by_label("Join our community").find(|n| !n.accesskit_node().is_hidden()).expect("the dialog's community link").click();
     assert_eq!(crate::support::step_collecting_urls(&mut h, 4), [links::COMMUNITY]);
 }
 
