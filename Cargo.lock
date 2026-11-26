@@ -6150,7 +6150,7 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft"
-version = "0.21.1-mirai.2"
+version = "0.22.1-mirai.1"
 dependencies = [
  "craft",
  "craft-update",
@@ -6175,7 +6175,7 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-a11y"
-version = "0.21.1-mirai.2"
+version = "0.22.1-mirai.1"
 dependencies = [
  "pdfcraft-content",
  "pdfcraft-cos",
@@ -6186,14 +6186,14 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-ai"
-version = "0.21.1-mirai.2"
+version = "0.22.1-mirai.1"
 dependencies = [
  "serde_json",
 ]
 
 [[package]]
 name = "pdfcraft-annot"
-version = "0.21.1-mirai.2"
+version = "0.22.1-mirai.1"
 dependencies = [
  "hayro-syntax",
  "pdfcraft-cos",
@@ -6206,7 +6206,7 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-audit"
-version = "0.21.1-mirai.2"
+version = "0.22.1-mirai.1"
 dependencies = [
  "pdfcraft-content",
  "pdfcraft-cos",
@@ -6217,7 +6217,7 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-automation"
-version = "0.21.1-mirai.2"
+version = "0.22.1-mirai.1"
 dependencies = [
  "base64 0.23.1",
  "craft",
@@ -6247,7 +6247,7 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-cli"
-version = "0.21.1-mirai.2"
+version = "0.22.1-mirai.1"
 dependencies = [
  "base64 0.23.1",
  "craft",
@@ -6265,11 +6265,11 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-compare"
-version = "0.21.1-mirai.2"
+version = "0.22.1-mirai.1"
 
 [[package]]
 name = "pdfcraft-content"
-version = "0.21.1-mirai.2"
+version = "0.22.1-mirai.1"
 dependencies = [
  "craft-pdf",
  "hayro-syntax",
@@ -6277,7 +6277,7 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-cos"
-version = "0.21.1-mirai.2"
+version = "0.22.1-mirai.1"
 dependencies = [
  "craft-pdf",
  "hayro-syntax",
@@ -6291,7 +6291,7 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-create"
-version = "0.21.1-mirai.2"
+version = "0.22.1-mirai.1"
 dependencies = [
  "craft-image-codecs",
  "craft-jpeg",
@@ -6311,7 +6311,7 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-crypt"
-version = "0.21.1-mirai.2"
+version = "0.22.1-mirai.1"
 dependencies = [
  "craft-pdf",
  "proptest",
@@ -6319,7 +6319,7 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-edit"
-version = "0.21.1-mirai.2"
+version = "0.22.1-mirai.1"
 dependencies = [
  "hayro-syntax",
  "icu_segmenter",
@@ -6338,7 +6338,7 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-engine"
-version = "0.21.1-mirai.2"
+version = "0.22.1-mirai.1"
 dependencies = [
  "chrono",
  "craft-cms",
@@ -6385,7 +6385,7 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-export"
-version = "0.21.1-mirai.2"
+version = "0.22.1-mirai.1"
 dependencies = [
  "craft-docx",
  "craft-html",
@@ -6402,7 +6402,7 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-filters"
-version = "0.21.1-mirai.2"
+version = "0.22.1-mirai.1"
 dependencies = [
  "craft-pdf",
  "proptest",
@@ -6411,7 +6411,7 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-fonts"
-version = "0.21.1-mirai.2"
+version = "0.22.1-mirai.1"
 dependencies = [
  "craft-fonts-build",
  "craft-pdf",
@@ -6423,7 +6423,7 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-forms"
-version = "0.21.1-mirai.2"
+version = "0.22.1-mirai.1"
 dependencies = [
  "hayro-syntax",
  "pdfcraft-content",
@@ -6436,11 +6436,11 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-geom"
-version = "0.21.1-mirai.2"
+version = "0.22.1-mirai.1"
 
 [[package]]
 name = "pdfcraft-js"
-version = "0.21.1-mirai.2"
+version = "0.22.1-mirai.1"
 dependencies = [
  "boa_engine",
  "chrono",
@@ -6448,7 +6448,7 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-measure"
-version = "0.21.1-mirai.2"
+version = "0.22.1-mirai.1"
 dependencies = [
  "pdfcraft-annot",
  "pdfcraft-content",
@@ -6461,14 +6461,14 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-model"
-version = "0.21.1-mirai.2"
+version = "0.22.1-mirai.1"
 dependencies = [
  "pdfcraft-cos",
 ]
 
 [[package]]
 name = "pdfcraft-ocr"
-version = "0.21.1-mirai.2"
+version = "0.22.1-mirai.1"
 dependencies = [
  "craft-image-codecs",
  "ocrs",
@@ -6483,7 +6483,7 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-ocr-worker"
-version = "0.21.1-mirai.2"
+version = "0.22.1-mirai.1"
 dependencies = [
  "js-sys",
  "pdfcraft-ocr",
@@ -6493,7 +6493,7 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-optimize"
-version = "0.21.1-mirai.2"
+version = "0.22.1-mirai.1"
 dependencies = [
  "craft-image-codecs",
  "craft-jpeg",
@@ -6511,11 +6511,11 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-oracle"
-version = "0.21.1-mirai.2"
+version = "0.22.1-mirai.1"
 
 [[package]]
 name = "pdfcraft-organize"
-version = "0.21.1-mirai.2"
+version = "0.22.1-mirai.1"
 dependencies = [
  "hayro-syntax",
  "pdfcraft-content",
@@ -6526,7 +6526,7 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-platform"
-version = "0.21.1-mirai.2"
+version = "0.22.1-mirai.1"
 dependencies = [
  "async-channel",
  "futures-lite",
@@ -6537,7 +6537,7 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-prc-render"
-version = "0.21.1-mirai.2"
+version = "0.22.1-mirai.1"
 dependencies = [
  "craft-prc",
  "flate2",
@@ -6546,7 +6546,7 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-preflight"
-version = "0.21.1-mirai.2"
+version = "0.22.1-mirai.1"
 dependencies = [
  "craft-cms",
  "craft-xml",
@@ -6558,7 +6558,7 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-print"
-version = "0.21.1-mirai.2"
+version = "0.22.1-mirai.1"
 dependencies = [
  "craft-cms",
  "craft-print",
@@ -6574,7 +6574,7 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-redact"
-version = "0.21.1-mirai.2"
+version = "0.22.1-mirai.1"
 dependencies = [
  "aho-corasick",
  "craft-xml",
@@ -6598,7 +6598,7 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-render"
-version = "0.21.1-mirai.2"
+version = "0.22.1-mirai.1"
 dependencies = [
  "bytemuck",
  "craft-pdf",
@@ -6623,7 +6623,7 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-sign"
-version = "0.21.1-mirai.2"
+version = "0.22.1-mirai.1"
 dependencies = [
  "aes",
  "aws-lc-rs",
@@ -6663,11 +6663,11 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-testkit"
-version = "0.21.1-mirai.2"
+version = "0.22.1-mirai.1"
 
 [[package]]
 name = "pdfcraft-ui-egui"
-version = "0.21.1-mirai.2"
+version = "0.22.1-mirai.1"
 dependencies = [
  "arboard",
  "base64 0.23.1",
@@ -6727,7 +6727,7 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-web"
-version = "0.21.1-mirai.2"
+version = "0.22.1-mirai.1"
 dependencies = [
  "craft",
  "craft-web-api",
@@ -6743,7 +6743,7 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-xfa"
-version = "0.21.1-mirai.2"
+version = "0.22.1-mirai.1"
 dependencies = [
  "base64 0.23.1",
  "craft-image-codecs",
@@ -6757,7 +6757,7 @@ dependencies = [
 
 [[package]]
 name = "pdfcraft-xfdf"
-version = "0.21.1-mirai.2"
+version = "0.22.1-mirai.1"
 dependencies = [
  "base64 0.23.1",
  "craft-csv",
